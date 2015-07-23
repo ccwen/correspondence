@@ -6,7 +6,7 @@ var Highlight=Reflux.createStore({
 	listenables:action_highlight
 	,highlight:""
 	,onEnter:function(linkid) {
-		this.trigger(store_link.get(linkid));
+		this.trigger(store_link.get(linkid)||{});
 	}
 	,onLeave:function(linkid) {
 		this.trigger({});

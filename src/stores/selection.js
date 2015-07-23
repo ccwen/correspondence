@@ -7,9 +7,9 @@ var Link=Reflux.createStore({
 	,onSet:function(id,selections) {
 		this.selections[id]=selections.filter(function(sel){return sel[1]});
 		//automatical search possible other selection
-		if (id=="s10.5" && (!this.selections["b10.5"] || this.selections["b10.5"].length==0)) {
-			this.selections["b10.5"]=[[1,5]];
-		}
+	//	if (id=="s10.5" && (!this.selections["b10.5"] || this.selections["b10.5"].length==0)) {
+	//		this.selections["b10.5"]=[[1,5]];
+	//	}
 		this.trigger(this.selections);
 	}
 	,get:function() {

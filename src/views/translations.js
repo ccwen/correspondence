@@ -39,7 +39,7 @@ var Translations=React.createClass({
 	}
 	,onSelectText:function(start,len,text,params,sels) {
 		var links=this.getLink(params.sender,"array");
-		var overlapped=markuputil.hasOverlap(start,len,links);
+		var overlapped=markuputil.hasOverlap(start+1,len-2,links);
 		if (overlapped) return true;
 
 		action_selection.set(params.sender,sels);
@@ -70,7 +70,7 @@ var Translations=React.createClass({
 		var selections=this.getSel(uti);
 		var highlights=this.getHighlight(uti);
 
-		return E("tr",null,
+		return E("tr",{key:idx},
 			E("td",null,item[0])
 			,E("td",null,E(LinkView,{
 				id:uti

@@ -76,7 +76,7 @@ var Highlight=Reflux.createStore({
 	listenables:action_highlight
 	,highlight:""
 	,onEnter:function(linkid) {
-		this.trigger(store_link.get(linkid));
+		this.trigger(store_link.get(linkid)||{});
 	}
 	,onLeave:function(linkid) {
 		this.trigger({});
@@ -137,9 +137,9 @@ var Link=Reflux.createStore({
 	,onSet:function(id,selections) {
 		this.selections[id]=selections.filter(function(sel){return sel[1]});
 		//automatical search possible other selection
-		if (id=="s10.5" && (!this.selections["b10.5"] || this.selections["b10.5"].length==0)) {
-			this.selections["b10.5"]=[[1,5]];
-		}
+	//	if (id=="s10.5" && (!this.selections["b10.5"] || this.selections["b10.5"].length==0)) {
+	//		this.selections["b10.5"]=[[1,5]];
+	//	}
 		this.trigger(this.selections);
 	}
 	,get:function() {
@@ -200,7 +200,7 @@ var Translations=React.createClass({displayName: "Translations",
 	}
 	,onSelectText:function(start,len,text,params,sels) {
 		var links=this.getLink(params.sender,"array");
-		var overlapped=markuputil.hasOverlap(start,len,links);
+		var overlapped=markuputil.hasOverlap(start+1,len-2,links);
 		if (overlapped) return true;
 
 		action_selection.set(params.sender,sels);
@@ -231,7 +231,7 @@ var Translations=React.createClass({displayName: "Translations",
 		var selections=this.getSel(uti);
 		var highlights=this.getHighlight(uti);
 
-		return E("tr",null,
+		return E("tr",{key:idx},
 			E("td",null,item[0])
 			,E("td",null,E(LinkView,{
 				id:uti
@@ -352,7 +352,7 @@ var E=React.createElement,PT=React.PropTypes;
 
 
 var mergeStyles=function(styles) {
-  if (!styles.length) return null;
+  if (!styles.length) return {}; //should return {} instead of null , otherwise react don't apply style
   var out={};
   for (var i=0;i<styles.length;i++) {
     for (var key in styles[i]) {
@@ -424,10 +424,6 @@ var SpanClass = React.createClass({
     var props={"data-tid":this.props.tid,style:style,"data-start":this.props.start
     ,onMouseEnter:this.onMouseEnter,onMouseLeave:this.onMouseLeave};    
     props.className=this.getTagType(this.props.tid).join(" ");  //pass className as it's  
-    if (style) {
-      //work around, react doensn't apply style, don't why
-      return E(span,props,E(span,{},this.props.children));
-    }
     
     return E(span,props,this.props.children);
   }
@@ -783,7 +779,7 @@ var InterlineView=React.createClass({
 		}
 		for (var i=0;i<props.highlights.length;i++) {
 			var H=props.highlights[i];
-			tags.push({s:H[0], l:H[1], style:styles.highlight, mid:"t"+i});	
+			tags.push({s:H[0], l:H[1], style:styles.highlight, mid:"hover_"+i});	
 		}
 		state.tags=tags;
 	}	
