@@ -1,12 +1,12 @@
 module.exports=[
- ["sanskrit","10.5","tasmāt tarhi subhūte bodhisattvena mahāsattvenaivam apratiṣṭhitaṃcittam utpādayitavyaṃ yanna kvacit pratiṣṭhitaṃ cittam utpādayitavyaṃna rūpa-pratiṣṭhitaṃ cittam utpādayitavyaṃ naśabda-gandha-rasa-spraṣṭavya-dharma-pratiṣṭhitaṃ cittamutpādayitavyam |"]
-,["kumarajiva","10.5","「是故須菩提，諸菩薩摩訶薩應如是生清淨心，不應住色生心，不應住聲、香、味、觸、法生心，應無所住而生其心。"]
-,["bodhiruci","10.5","	是故須菩提！諸菩薩摩訶薩，應如是生清淨心，而無所住，不住色生心，不住聲、香、味、觸、法生心，應無所住而生其心。"]
-,["gupta","10.5","彼故此，善實！菩薩摩訶薩如是不住心發生應，不色住心發生應，不聲、香、味、觸、法住心發生應，無所住心發生應！"]
-,["yijing","10.5","是故，妙生！菩薩不住於事，不住隨處，不住色、聲、香、味、觸、法，應生其心；應生不住事心，應生不住隨處心，應生不住色、聲、香、味、觸、法心。"]
-,["xuanzang","10.5","是故，善現，菩薩如是都無所住應生其心，不住於色應生其心，不住非色應生其心，不住聲、香、味、觸、法應生其心，不住非聲、香、味、觸、法應生其心，都無所住應生其心。"]
-,["tibetan","10.5","རབ་འབྱོར་དེ་ལྟ་བས་ན། བྱང་ཆུབ་སེམས་དཔའ་སེམས་དཔའ་ཆེན་པོས་འདི་ལྟར་མི་གནས་པར་སེམས་པ་བསྐྱེད་པར་བྱ་སྟེ། ཅི་ལ་ཡང་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། ། གཟུགས་ལ་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། ། སྒྲ་དང་དྲི་དང་རོ་དང་རེག་བྱ་དང་ཆོས་ལ་ཡང་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། །"]
-,["conze","10.5","Therefore then, Subhuti, the Bodhisattva, the great being, should produce an unsupported thought, i.e. a thought which is nowhere supported, a thought unsupported by sights, sounds, smells, tastes, touchables or mind-objects."]
+ ["sanskrit","s10.5","tasmāt tarhi subhūte bodhisattvena mahāsattvenaivam apratiṣṭhitaṃcittam utpādayitavyaṃ yanna kvacit pratiṣṭhitaṃ cittam utpādayitavyaṃna rūpa-pratiṣṭhitaṃ cittam utpādayitavyaṃ naśabda-gandha-rasa-spraṣṭavya-dharma-pratiṣṭhitaṃ cittamutpādayitavyam |"]
+,["kumarajiva","k10.5","「是故須菩提，諸菩薩摩訶薩應如是生清淨心，不應住色生心，不應住聲、香、味、觸、法生心，應無所住而生其心。"]
+,["bodhiruci","b10.5","	是故須菩提！諸菩薩摩訶薩，應如是生清淨心，而無所住，不住色生心，不住聲、香、味、觸、法生心，應無所住而生其心。"]
+,["gupta","g10.5","彼故此，善實！菩薩摩訶薩如是不住心發生應，不色住心發生應，不聲、香、味、觸、法住心發生應，無所住心發生應！"]
+,["yijing","y10.5","是故，妙生！菩薩不住於事，不住隨處，不住色、聲、香、味、觸、法，應生其心；應生不住事心，應生不住隨處心，應生不住色、聲、香、味、觸、法心。"]
+,["xuanzang","x10.5","是故，善現，菩薩如是都無所住應生其心，不住於色應生其心，不住非色應生其心，不住聲、香、味、觸、法應生其心，不住非聲、香、味、觸、法應生其心，都無所住應生其心。"]
+,["tibetan","t10.5","རབ་འབྱོར་དེ་ལྟ་བས་ན། བྱང་ཆུབ་སེམས་དཔའ་སེམས་དཔའ་ཆེན་པོས་འདི་ལྟར་མི་གནས་པར་སེམས་པ་བསྐྱེད་པར་བྱ་སྟེ། ཅི་ལ་ཡང་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། ། གཟུགས་ལ་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། ། སྒྲ་དང་དྲི་དང་རོ་དང་རེག་བྱ་དང་ཆོས་ལ་ཡང་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། །"]
+,["conze","c10.5","Therefore then, Subhuti, the Bodhisattva, the great being, should produce an unsupported thought, i.e. a thought which is nowhere supported, a thought unsupported by sights, sounds, smells, tastes, touchables or mind-objects."]
 ];
 
 /*
