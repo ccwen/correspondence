@@ -21,7 +21,6 @@ var Link=Reflux.createStore({
 		return out;
 	}
 	,clear:function() {
-		console.log("clear selection")
 		for (var i in this.selections) {
 			this.selections[i]=[];
 		}

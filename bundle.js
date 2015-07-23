@@ -6,37 +6,32 @@ ksanagap.boot("correspondence",function(){
 	var Main=React.createElement(require("./src/main.jsx"));
 	ksana.mainComponent=React.render(Main,document.getElementById("main"));
 });
-},{"./src/main.jsx":"C:\\ksana2015\\correspondence\\src\\main.jsx","ksana2015-webruntime/ksanagap":"C:\\ksana2015\\node_modules\\ksana2015-webruntime\\ksanagap.js","ksana2015-webruntime/livereload":"C:\\ksana2015\\node_modules\\ksana2015-webruntime\\livereload.js","react":"react"}],"C:\\ksana2015\\correspondence\\src\\actions.js":[function(require,module,exports){
-var Reflux=require("reflux");
-var actions=Reflux.createActions([
-	"add"
-	,"clear"
-]);
-module.exports=actions;
+},{"./src/main.jsx":"C:\\ksana2015\\correspondence\\src\\main.jsx","ksana2015-webruntime/ksanagap":"C:\\ksana2015\\node_modules\\ksana2015-webruntime\\ksanagap.js","ksana2015-webruntime/livereload":"C:\\ksana2015\\node_modules\\ksana2015-webruntime\\livereload.js","react":"react"}],"C:\\ksana2015\\correspondence\\src\\actions\\highlight.js":[function(require,module,exports){
+module.exports=require("reflux").createActions(["enter","leave"]);
 },{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\actions\\link.js":[function(require,module,exports){
-module.exports=require("reflux").createActions(["add","remove","replace"]);
+module.exports=require("reflux").createActions(["add","remove","replace","fetch"]);
 },{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\actions\\selection.js":[function(require,module,exports){
-arguments[4]["C:\\ksana2015\\correspondence\\src\\actions\\link.js"][0].apply(exports,arguments)
+module.exports=require("reflux").createActions(["set","clear"]);
 },{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\controls.js":[function(require,module,exports){
 var React=require("react");
-var actions=require("./actions");
+var action=require("./actions/link");
 var Controls=React.createClass({displayName: "Controls",
-  	add:function() {
-		actions.add(Math.random().toString().substr(2,5));
+  addLink:function() {
+		action.add();
 	}
 	,clear:function() {
 		actions.clear();
 	}
 	,render:function() {
 		return React.createElement("div", null, 
-      		React.createElement("button", null, "Add Link"), 
+      		React.createElement("button", {onClick: this.addLink}, "Add Link"), 
       		React.createElement("button", null, "Remove Link")
      )
 	}
 });
 
 module.exports=Controls;
-},{"./actions":"C:\\ksana2015\\correspondence\\src\\actions.js","react":"react"}],"C:\\ksana2015\\correspondence\\src\\main.jsx":[function(require,module,exports){
+},{"./actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","react":"react"}],"C:\\ksana2015\\correspondence\\src\\main.jsx":[function(require,module,exports){
 var React=require("react");
 var data=require("./mockdata");
 var Translations=require("./views/translations");
@@ -52,14 +47,14 @@ var Maincomponent = React.createClass({displayName: "Maincomponent",
 module.exports=Maincomponent;
 },{"./controls":"C:\\ksana2015\\correspondence\\src\\controls.js","./mockdata":"C:\\ksana2015\\correspondence\\src\\mockdata.js","./views/translations":"C:\\ksana2015\\correspondence\\src\\views\\translations.js","react":"react"}],"C:\\ksana2015\\correspondence\\src\\mockdata.js":[function(require,module,exports){
 module.exports=[
- ["sanskrit","10.5","tasmāt tarhi subhūte bodhisattvena mahāsattvenaivam apratiṣṭhitaṃcittam utpādayitavyaṃ yanna kvacit pratiṣṭhitaṃ cittam utpādayitavyaṃna rūpa-pratiṣṭhitaṃ cittam utpādayitavyaṃ naśabda-gandha-rasa-spraṣṭavya-dharma-pratiṣṭhitaṃ cittamutpādayitavyam |"]
-,["kumarajiva","10.5","「是故須菩提，諸菩薩摩訶薩應如是生清淨心，不應住色生心，不應住聲、香、味、觸、法生心，應無所住而生其心。"]
-,["bodhiruci","10.5","	是故須菩提！諸菩薩摩訶薩，應如是生清淨心，而無所住，不住色生心，不住聲、香、味、觸、法生心，應無所住而生其心。"]
-,["gupta","10.5","彼故此，善實！菩薩摩訶薩如是不住心發生應，不色住心發生應，不聲、香、味、觸、法住心發生應，無所住心發生應！"]
-,["yijing","10.5","是故，妙生！菩薩不住於事，不住隨處，不住色、聲、香、味、觸、法，應生其心；應生不住事心，應生不住隨處心，應生不住色、聲、香、味、觸、法心。"]
-,["xuanzang","10.5","是故，善現，菩薩如是都無所住應生其心，不住於色應生其心，不住非色應生其心，不住聲、香、味、觸、法應生其心，不住非聲、香、味、觸、法應生其心，都無所住應生其心。"]
-,["tibetan","10.5","རབ་འབྱོར་དེ་ལྟ་བས་ན། བྱང་ཆུབ་སེམས་དཔའ་སེམས་དཔའ་ཆེན་པོས་འདི་ལྟར་མི་གནས་པར་སེམས་པ་བསྐྱེད་པར་བྱ་སྟེ། ཅི་ལ་ཡང་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། ། གཟུགས་ལ་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། ། སྒྲ་དང་དྲི་དང་རོ་དང་རེག་བྱ་དང་ཆོས་ལ་ཡང་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། །"]
-,["conze","10.5","Therefore then, Subhuti, the Bodhisattva, the great being, should produce an unsupported thought, i.e. a thought which is nowhere supported, a thought unsupported by sights, sounds, smells, tastes, touchables or mind-objects."]
+ ["sanskrit","s10.5","tasmāt tarhi subhūte bodhisattvena mahāsattvenaivam apratiṣṭhitaṃcittam utpādayitavyaṃ yanna kvacit pratiṣṭhitaṃ cittam utpādayitavyaṃna rūpa-pratiṣṭhitaṃ cittam utpādayitavyaṃ naśabda-gandha-rasa-spraṣṭavya-dharma-pratiṣṭhitaṃ cittamutpādayitavyam |"]
+,["kumarajiva","k10.5","「是故須菩提，諸菩薩摩訶薩應如是生清淨心，不應住色生心，不應住聲、香、味、觸、法生心，應無所住而生其心。"]
+,["bodhiruci","b10.5","	是故須菩提！諸菩薩摩訶薩，應如是生清淨心，而無所住，不住色生心，不住聲、香、味、觸、法生心，應無所住而生其心。"]
+,["gupta","g10.5","彼故此，善實！菩薩摩訶薩如是不住心發生應，不色住心發生應，不聲、香、味、觸、法住心發生應，無所住心發生應！"]
+,["yijing","y10.5","是故，妙生！菩薩不住於事，不住隨處，不住色、聲、香、味、觸、法，應生其心；應生不住事心，應生不住隨處心，應生不住色、聲、香、味、觸、法心。"]
+,["xuanzang","x10.5","是故，善現，菩薩如是都無所住應生其心，不住於色應生其心，不住非色應生其心，不住聲、香、味、觸、法應生其心，不住非聲、香、味、觸、法應生其心，都無所住應生其心。"]
+,["tibetan","t10.5","རབ་འབྱོར་དེ་ལྟ་བས་ན། བྱང་ཆུབ་སེམས་དཔའ་སེམས་དཔའ་ཆེན་པོས་འདི་ལྟར་མི་གནས་པར་སེམས་པ་བསྐྱེད་པར་བྱ་སྟེ། ཅི་ལ་ཡང་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། ། གཟུགས་ལ་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། ། སྒྲ་དང་དྲི་དང་རོ་དང་རེག་བྱ་དང་ཆོས་ལ་ཡང་མི་གནས་པར་སེམས་བསྐྱེད་པར་བྱའོ། །"]
+,["conze","c10.5","Therefore then, Subhuti, the Bodhisattva, the great being, should produce an unsupported thought, i.e. a thought which is nowhere supported, a thought unsupported by sights, sounds, smells, tastes, touchables or mind-objects."]
 ];
 
 /*
@@ -72,28 +67,177 @@ module.exports=[
 ,"t9.2":"རབ་འབྱོར་གྱིས་གསོལ་པ། བཅོམ་ལྡན་འདས་དེ་ནི་མ་ལགས་སོ། ། དེ་ཅིའི་སླད་དུ་ཞེ་ན། བཅོམ་ལྡན་འདས་དེ་ནི་ཅི་ལའང་ཞུགས་པ་མ་མཆིས་པའི་སླད་དུ་སྟེ། དེས་ན་རྒྱུན་དུ་ཞུགས་པ་ཞེས་བགྱིའོ། ། གཟུགས་ལའང་མ་ཞུགས། སྒྲ་ལ་ཡང་མ་ལགས། དྲི་ལ་ཡང་མ་ལགས། རོ་ལ་ཡང་མ་ལགས། རེག་བྱ་ལ་ཡང་མ་ལགས། ཆོས་རྣམས་ལ་ཡང་མ་ཞུགས་ཏེ། དེས་ན་རྒྱུན་དུ་ཞུགས་པ་ཞེས་བགྱིའོ། །"
 ,"e9.2":"Subhuti replied: No indeed, O Lord. And why? Because, O Lord, he has not won any dharma. Therefore is he called a Stream-winner. No sight-object has been won, no sounds, smells, tastes, touchables, or objects of mind. That is why he is called a 'Streamwinner'."
 */
-},{}],"C:\\ksana2015\\correspondence\\src\\views\\translations.js":[function(require,module,exports){
+},{}],"C:\\ksana2015\\correspondence\\src\\stores\\highlight.js":[function(require,module,exports){
+var Reflux=require("reflux");
+var store_link=require("../stores/link");
+var action_highlight=require("../actions/highlight");
+
+var Highlight=Reflux.createStore({
+	listenables:action_highlight
+	,highlight:""
+	,onEnter:function(linkid) {
+		this.trigger(store_link.get(linkid));
+	}
+	,onLeave:function(linkid) {
+		this.trigger({});
+	}
+});
+module.exports=Highlight;
+},{"../actions/highlight":"C:\\ksana2015\\correspondence\\src\\actions\\highlight.js","../stores/link":"C:\\ksana2015\\correspondence\\src\\stores\\link.js","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\link.js":[function(require,module,exports){
+var Reflux=require("reflux");
+var action=require("../actions/link");
+var store_selection=require("../stores/selection");
+var action_selection=require("../actions/selection");
+var mockdata=require("./mockdata").links;
+var Link=Reflux.createStore({
+	listenables:action
+	,links:mockdata
+	,onAdd:function() {
+		var selections=store_selection.get();
+		if (!Object.keys(selections).length)return;
+		action_selection.clear();
+
+		var key='L'+Math.random().toString().substr(2,5);
+		this.links[key]=selections;
+		this.trigger(this.links);
+		//create a intertextual link
+	}
+	,get:function(id) {
+		return this.links[id];
+	}
+	,onFetch:function(){
+		setTimeout(function(){
+			this.trigger(this.links);	
+		}.bind(this),100);
+		
+	}
+});
+module.exports=Link;
+},{"../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","../stores/selection":"C:\\ksana2015\\correspondence\\src\\stores\\selection.js","./mockdata":"C:\\ksana2015\\correspondence\\src\\stores\\mockdata.js","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\mockdata.js":[function(require,module,exports){
+var links={
+	"xxx":{
+	"s10.5":[[21,13,"bodhisattven"]]
+	,"k10.5":[[7,3,"諸菩薩"]]
+	,"b10.5":[[7,3,"諸菩薩"]]
+	,"g10.5":[[7,2,"菩薩"]]
+	,"y10.5":[[6,2,"菩薩"]]
+	,"x10.5":[[6,2,"菩薩"]]
+	,"c10.5":[[25,15,"the Bodhisattva"]]
+	,"t10.5":[[21,16,"བྱང་ཆུབ་སེམས་དཔའ་སེམས་དཔའ"]]
+	}
+};
+module.exports={links:links}; 
+},{}],"C:\\ksana2015\\correspondence\\src\\stores\\selection.js":[function(require,module,exports){
+var Reflux=require("reflux");
+var action=require("../actions/selection");
+
+var Link=Reflux.createStore({
+	listenables:action
+	,selections:{}
+	,onSet:function(id,selections) {
+		this.selections[id]=selections.filter(function(sel){return sel[1]});
+		//automatical search possible other selection
+		if (id=="s10.5" && (!this.selections["b10.5"] || this.selections["b10.5"].length==0)) {
+			this.selections["b10.5"]=[[1,5]];
+		}
+		this.trigger(this.selections);
+	}
+	,get:function() {
+		var out={};
+		for (var i in this.selections) {
+			var sel=this.selections[i];
+			if (sel && sel.length) out[i]=JSON.parse(JSON.stringify(sel));
+		}
+		return out;
+	}
+	,clear:function() {
+		for (var i in this.selections) {
+			this.selections[i]=[];
+		}
+		this.trigger(this.selections);
+	}
+});
+module.exports=Link;
+},{"../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\views\\translations.js":[function(require,module,exports){
 var React=require("react/addons");
+var Reflux=require("reflux");
 var bs=require("react-bootstrap");
 var Table=bs.Table;
-var SelectableView=require("ksana-layer-react").SelectableView;
+var LinkView=require("ksana-layer-react").LinkView;
+var markuputil=require("ksana-layer-react").markuputil;
 var E=React.createElement;
 var action_selection=require("../actions/selection");
 var action_link=require("../actions/link");
-
+var store_link=require("../stores/link");
+var store_highlight=require("../stores/highlight");
+var store_selection=require("../stores/selection");
+var action_highlight=require("../actions/highlight");
 
 var Translations=React.createClass({displayName: "Translations",
+	mixins:[Reflux.listenTo(store_link,"onLinkData")
+					,Reflux.listenTo(store_selection,"onSelectionData")
+					,Reflux.listenTo(store_highlight,"onHighlightData")]
+	,getInitialState:function(){
+		return {links:{},selections:{},highlights:{}};
+	}
+	,onSelectionData:function(selections){
+		this.setState({selections:selections});
+	}
+	,onLinkData:function(links) {
+		this.setState({links:links});
+	}
+	,onHighlightData:function(highlights) {
+		this.setState({highlights:highlights});
+	}
+	,onEnterTag:function(e,tid,linkid) {
+		action_highlight.enter(linkid);
+	}
+	,onLeaveTag:function(e,tid,linkid) {
+		action_highlight.leave(linkid);
+	}
+	,componentDidMount:function(){
+		action_link.fetch();
+	}
+	,onSelectText:function(start,len,text,params,sels) {
+		var links=this.getLink(params.sender,"array");
+		var overlapped=markuputil.hasOverlap(start,len,links);
+		if (overlapped) return true;
 
-	onSelectText:function(start,len,text,params,sels) {
-		console.log("selectext",arguments)
-		//return true if already has markup.
-		//action_selection.set(params.sender,sels);
+		action_selection.set(params.sender,sels);
+	}
+	,onClickTag:function(e,reactid,tag) {
+		console.log(tag);
+	}
+	,getLink:function(uti,format) {
+		var obj={},out=[];
+		for (var i in this.state.links) {
+			var group=this.state.links[i];
+			if (group[uti]) {
+				obj[i]=group[uti];
+				out=out.concat(group[uti]);
+			}
+		};
+		return (format=="array")?out:obj;	
+	}
+	,getSel:function(uti) {
+		return this.state.selections[uti];
+	}
+	,getHighlight:function(uti) {
+		return this.state.highlights[uti];
 	}
 	,renderItem:function(item,idx) {
+		var uti=item[1];
+		var links=this.getLink(uti);
+		var selections=this.getSel(uti);
+		var highlights=this.getHighlight(uti);
+
 		return E("tr",null,
 			E("td",null,item[0])
-			,E("td",null,E(SelectableView,{
-				selections:[[1,2,"a"]],id:idx,onSelectText:this.onSelectText,text:item[2]}))
+			,E("td",null,E(LinkView,{
+				id:uti
+				,onClickTag:this.onClickTag,onEnterTag:this.onEnterTag,onLeaveTag:this.onLeaveTag
+				,selections:selections,links:links,highlights:highlights
+				,onSelectText:this.onSelectText,text:item[2]}))
 		);
 	}
 	,render:function() {
@@ -102,13 +246,14 @@ var Translations=React.createClass({displayName: "Translations",
 	}
 })
 module.exports=Translations;
-},{"../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","ksana-layer-react":"C:\\ksana2015\\node_modules\\ksana-layer-react\\index.js","react-bootstrap":"react-bootstrap","react/addons":"react/addons"}],"C:\\ksana2015\\node_modules\\ksana-layer-react\\index.js":[function(require,module,exports){
+},{"../actions/highlight":"C:\\ksana2015\\correspondence\\src\\actions\\highlight.js","../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","../stores/highlight":"C:\\ksana2015\\correspondence\\src\\stores\\highlight.js","../stores/link":"C:\\ksana2015\\correspondence\\src\\stores\\link.js","../stores/selection":"C:\\ksana2015\\correspondence\\src\\stores\\selection.js","ksana-layer-react":"C:\\ksana2015\\node_modules\\ksana-layer-react\\index.js","react-bootstrap":"react-bootstrap","react/addons":"react/addons","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\node_modules\\ksana-layer-react\\index.js":[function(require,module,exports){
 var FlattenView=require("./src/flattenview");
 var SelectableView=require("./src/selectableview");
 var InterlineView=require("./src/interlineview");
+var LinkView=require("./src/linkview");
 
 var textrange=require("./src/textrange");
-
+var markuputil=require("./src/markuputil");
 
 //var BaseView=require("./src/baseview");
 //var MultiSelectView=require("./src/multiselectview");
@@ -117,9 +262,14 @@ var textrange=require("./src/textrange");
 
 //var RevisionView=require("./src/revisionview");
 
-module.exports={FlattenView:FlattenView,SelectableView:SelectableView,InterlineView:InterlineView,
-	textrange:textrange};
-},{"./src/flattenview":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\flattenview.js","./src/interlineview":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\interlineview.js","./src/selectableview":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\selectableview.js","./src/textrange":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\textrange.js"}],"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\caretpos.js":[function(require,module,exports){
+module.exports={FlattenView:FlattenView
+	,SelectableView:SelectableView
+	,InterlineView:InterlineView
+	,LinkView:LinkView
+	,textrange:textrange
+  ,markuputil:markuputil
+};
+},{"./src/flattenview":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\flattenview.js","./src/interlineview":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\interlineview.js","./src/linkview":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\linkview.js","./src/markuputil":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\markuputil.js","./src/selectableview":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\selectableview.js","./src/textrange":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\textrange.js"}],"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\caretpos.js":[function(require,module,exports){
 var create=function(_text) {
 	var caretPos={},pos=0,text=_text;
 
@@ -220,6 +370,8 @@ var SpanClass = React.createClass({
     ,tags:PT.array.isRequired
     ,start:PT.number.isRequired
     ,tagStyles:PT.object
+    ,onLeaveTag:PT.func
+    ,onEnterTag:PT.func
   }
   ,getTagStyle:function(tid) {
     if (!tid) return {};
@@ -248,12 +400,29 @@ var SpanClass = React.createClass({
     }
     return out;
   }
+  ,getTid:function(e) {
+    var node=e.target;
+    while (node&&typeof node.dataset["start"]=="undefined") {
+      node=node.parentNode;
+    }
+    var tid=node.dataset["tid"];
+    return tid;
+  }
+  ,onMouseEnter:function(e) {
+    var tid=this.getTid(e);
+    if(this.props.onEnterTag && tid) this.props.onEnterTag(e,tid);
+  }
+  ,onMouseLeave:function(e) {
+    var tid=this.getTid(e);
+    if(this.props.onLeaveTag && tid) this.props.onLeaveTag(e,tid);
+  }
   ,render:function() {
     var styles=this.getTagStyle(this.props.tid);
     var style=mergeStyles(styles);
     var span=React.Text||"span";
     
-    var props={"data-tid":this.props.tid,style:style,"data-start":this.props.start};    
+    var props={"data-tid":this.props.tid,style:style,"data-start":this.props.start
+    ,onMouseEnter:this.onMouseEnter,onMouseLeave:this.onMouseLeave};    
     props.className=this.getTagType(this.props.tid).join(" ");  //pass className as it's  
     if (style) {
       //work around, react doensn't apply style, don't why
@@ -293,10 +462,11 @@ var FlattenView=React.createClass({
 		,span:PT.func
 		,style:PT.object
 		,allowKeys:PT.array
-		,onMouseUp:PT.func,onKeyDown:PT.func ,onKeyUp:PT.func	,onKeyPress:PT.func
+		,onEnterTag:PT.func
+		,onLeaveTag:PT.func
 	}
 	,getDefaultProps:function() {
-		return {tags:{},styles:{},span:defaultSpan};
+		return {tags:[],styles:{},span:defaultSpan};
 	}
 	,tagAtPos:[] // hold covering tags given a text position
 	,mergeStyle:function(style) {
@@ -324,9 +494,10 @@ var FlattenView=React.createClass({
 		});
 		before.length && out.push(E(React.Text||"span",{key:"b"+start},before));
 
-		out.push(E(this.props.span,{index:this.props.index,
-					styles:this.props.styles,key:'s'+start, tags:tags,tid:tid,start:start}
-				,spantext )
+		out.push(E(this.props.span,{index:this.props.index
+					,onEnterTag:this.props.onEnterTag,onLeaveTag:this.props.onLeaveTag
+					,styles:this.props.styles,key:'s'+start, tags:tags,tid:tid,start:start}
+				,spantext)
 		);
 
 		(tid||[]).map(function(m){ 
@@ -563,7 +734,109 @@ var keyboard_mixin={
 	}
 }
 module.exports=keyboard_mixin;
-},{}],"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\markup2tag.js":[function(require,module,exports){
+},{}],"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\linkview.js":[function(require,module,exports){
+/*
+	View for building intertextual link.
+*/
+try {
+	var React=require("react-native");
+	var PureRenderMixin=null;
+} catch(e) {
+	var React=require("react/addons");
+	var PureRenderMixin=React.addons.PureRenderMixin;
+}
+var update=React.addons.update, E=React.createElement, PT=React.PropTypes;
+
+var SelectableView=require("./selectableview");
+var keyboard_mixin=require("./keyboard_mixin");
+var styles={
+	link:{borderBottom:"2px solid #0000ff"}
+	,highlight:{background:"yellow"}
+}
+
+var InterlineView=React.createClass({
+	mixins:[PureRenderMixin]
+	,propTypes:{
+		links:PT.object
+		,highlights:PT.array
+		,selections:PT.array
+		,user:PT.string
+		,allowkeys:PT.array
+		,onKeyPress:PT.func
+		,onHoverLink:PT.func
+	}
+	,getDefaultProps:function() {
+		return {links:{},highlights:[],selections:[],user:"anonymous"};
+	}
+	,componentWillUpdate:function(nextProps,nextState) {
+		this.combinetag(nextProps,nextState);
+	}
+	,componentDidMount:function() {
+		this.forceUpdate();
+	}
+	,combinetag:function(props,state) {
+		var tags=[];
+		for (var key in props.links) {
+			props.links[key].forEach(function(H){
+				tags.push({s:H[0], l:H[1],style:styles.link, mid:key});
+			});
+		}
+		for (var i=0;i<props.highlights.length;i++) {
+			var H=props.highlights[i];
+			tags.push({s:H[0], l:H[1], style:styles.highlight, mid:"t"+i});	
+		}
+		state.tags=tags;
+	}	
+	,getInitialState:function() {
+		var allowKeys=keyboard_mixin.arrowkeys;
+		if (this.props.allowKeys && this.props.allowKeys.length) {
+			allowKeys=allowKeys.concat(this.props.allowKeys);
+		}
+		return {tags:[],editing:null,hovering:null,markupActivated:{},allowKeys:allowKeys};
+	}
+	,onClick:function(e,reactid) {
+		if (this.hoveringTag && this.props.onClickTag) {
+			this.props.onClickTag(e,reactid,this.hoveringTag);
+		}
+	}
+	,onLeaveTag:function(e,tid) {
+		this.hovering=null;
+		this.hoveringTag=null;
+		var leavingTag=null;
+		if (this.state.tags[tid]) leavingTag=this.state.tags[tid].mid;
+		e.target.style.cursor="";
+		if (this.props.onLeaveTag) {
+			this.props.onLeaveTag(e,tid,leavingTag);
+		}
+	}
+	,onEnterTag:function(e,tid) {
+		this.hovering=e.target;
+		this.hoveringTag=null;	
+		if (this.state.tags[tid]) this.hoveringTag=this.state.tags[tid].mid;
+		if (this.props.onEnterTag) {
+			this.props.onEnterTag(e,tid,this.hoveringTag);
+		}
+		e.target.style.cursor="pointer";
+	}
+	,render:function(){
+		var props=update(this.props,{$merge:{tags:this.state.tags,
+			selectable:this.props.selectable,
+			allowKeys:this.state.allowKeys,
+			onEnterTag:this.onEnterTag,
+			onLeaveTag:this.onLeaveTag,
+			onFocus:this.props.onFocus,
+			onBlur:this.props.onBlur,
+			onClick:this.onClick,
+			selections:this.props.selections,
+			onKeyPress:this.onKeyPress}});
+		delete props.markups;//hide markups from flattenview
+		return E(SelectableView,props);
+	}
+
+});
+
+module.exports=InterlineView;
+},{"./keyboard_mixin":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\keyboard_mixin.js","./selectableview":"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\selectableview.js","react-native":"react-native","react/addons":"react/addons"}],"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\markup2tag.js":[function(require,module,exports){
 var React=require("react");
 var E=React.createElement;
 var typedef=require("./typedef");
@@ -720,6 +993,14 @@ var groupByOffset=function(markups) {
 	return out;
 }
 
+var	hasOverlap=function(start,len,markups){
+	for (var i in markups) {
+		var m=markups[i];
+		if (!(m[0]>start+len || m[0]+m[1]<start)) return true;
+	}
+	return false;
+}
+
 var nmarkupAtPos=function(markups,offset) {
     return markups.reduce(function(prev,m){return (m.s===offset)?prev+1:prev },0);
 }
@@ -749,7 +1030,7 @@ var spreadMarkup=function(markups){
 }
 
 module.exports={groupByOffset:groupByOffset,nmarkupAtPos:nmarkupAtPos,
-	spreadMarkup:spreadMarkup};
+	spreadMarkup:spreadMarkup,hasOverlap:hasOverlap};
 },{}],"C:\\ksana2015\\node_modules\\ksana-layer-react\\src\\revision\\edit.js":[function(require,module,exports){
 try {
 	var React=require("react-native");
@@ -1118,17 +1399,22 @@ var SelectableView=React.createClass({
 		,tags:PT.array
 		,selections:PT.array
 		,allowKeys:PT.array
+		,onMouseUp:PT.func
+		,onSpanEnter:PT.func,onSpanLeave:PT.func
 	}
-	,updateSelection:function() {
-		var seltags=this.tagFromSel(this.state.tags,this.ranges.get());
-		this.setState({tags:seltags});		
+	,updateSelection:function(tags) {
+		var seltags=this.tagFromSel(tags||this.state.tags,this.ranges.get());
+		this.setState({tags:seltags});
+	}
+	,setSelections:function(props,tags) {
+		if (props.selections) {
+			this.ranges.set(props.selections);
+			return this.updateSelection(tags);
+		}
 	}
 	,componentWillMount:function() {
 		this.ranges=textrange.create();
-		if (this.props.selections && this.props.selections.length) {
-			this.ranges.set(this.props.selections);
-			this.updateSelection();
-		}
+		this.setSelections(this.props);
 	}
 	,getInitialState:function(){
 		var allowkeys=KeyboardMixin.arrowkeys;
@@ -1142,15 +1428,16 @@ var SelectableView=React.createClass({
 		var seltags=nextProps.tags;
 		if (this.props.selectable!=="no") {
 			seltags=this.tagFromSel(seltags,this.ranges.get());	
+			this.setState({tags:seltags});
 		}
-		
-		this.setState({tags:seltags});
+		this.setSelections(nextProps,seltags);
 	}
 	,componentDidMount:function() {
 		//turn contentEditable on for caret, cannot set in render as React will give warning
 		if (this.props.showCaret) this.getDOMNode().contentEditable=true;
 	}
 	,tagFromSel:function(tags,sels) {
+		if (!tags)return;
 		tags=tags.filter(function(m){ return m.type!=="_selected_";});
 		sels.map(function(sel){
 			if (sel[1]>0) tags.push({s:sel[0],l:sel[1],type:"_selected_",style:selectedTextStyle});
@@ -1160,19 +1447,43 @@ var SelectableView=React.createClass({
 	,markSelection:function(start,len,selectedtext,params){
 		var selectable=this.props.selectable;
 		if (selectable==="no") return;
-		if(this.props.onSelectText){
-			if (this.ranges.find(start,len)===-1) {//newly added selected
-				var cancel=this.props.onSelectText(start,len,selectedtext,params,this.ranges.get());
-				if (cancel) return;
-			}
-		}
 
 		if (params.ctrlKey&&selectable==="multiple") {
 			this.ranges.add(start,len,selectedtext)	
 		} else {
 			this.ranges.set([[start,len,selectedtext]]);	
 		}
-		this.updateSelection();
+
+		if(this.props.onSelectText){
+			var cancel=this.props.onSelectText(start,len,selectedtext,params,this.ranges.get());
+			if (cancel) {
+					this.ranges.remove(start,len,selectedtext);
+			};
+		}
+
+		this.updateSelection(this.state.tags);
+	}
+	,onDoubleClick:function(e) {
+		this.onMouseUp(e);
+	}
+	,removeBlankInselection:function(sel,text) {
+		if (text.trim()==="") return;
+		var s=0,c=text.charCodeAt(0);
+		while (c<0x33 || (c>=0xf0b && c<=0xf0e)) {
+			sel.start++;
+			sel.len--;
+			text=text.substr(1);
+			c=text.charCodeAt(0);
+		}
+
+		var e=e=text.length-1;
+		c=text.charCodeAt(text.length-1);
+		while (c<0x33 || (c>=0xf0b && c<=0xf0e)) {
+			sel.len--;
+			text=text.substr(0,text.length-2);
+			c=text.charCodeAt(text.length-1);
+		}
+		return text;
 	}
 	,onMouseUp:function(e) {
 		if (e.target.nodeName!="SPAN") return;
@@ -1184,7 +1495,7 @@ var SelectableView=React.createClass({
 		if (text.charCodeAt(0)>=0xD800 ) { //surrogate
 			text=this.props.text.substr(sel.start,sel.len||2);
 		}
-
+		text=this.removeBlankInselection(sel,text);
 		var cancel=sel&&this.markSelection(sel.start,sel.len,text,
 			{ctrlKey:e.ctrlKey,shiftKey:e.shiftKey,sender:this.props.id});
 		if (!cancel) this.selection=sel;
@@ -1196,9 +1507,13 @@ var SelectableView=React.createClass({
 	,render:function(){
 		var props=update(this.props,{$merge:{
 			onMouseUp:this.onMouseUp
+			,onClick:this.props.onClick
+			,onSpanEnter:this.props.onSpanEnter
+			,onSpanLeave:this.props.onSpanLeave
 			,onKeyDown:this.props.onKeyDown||this.onkeydown
 			,onKeyUp:this.props.onKeyUp||this.onkeyup
 			,onKeyPress:this.props.onKeyPress||this.onkeypress
+			,onDoubleClick:this.onDoubleClick
 			,onFocus:this.props.onFocus||this.onFocus
 			,onBlur:this.props.onBlur||this.onBlur			
 			,tags:this.state.tags
@@ -1274,14 +1589,13 @@ var restore=function(domnode,oldsel) {
 var get=function(rootele) {
     var sel=window.getSelection();
     if (!sel.baseNode) return;
-    var off=getPos(rootele,sel.baseNode,sel.baseOffset);
-    var off2=getPos(rootele,sel.extentNode,sel.extentOffset);
+
+    var off=getPos(rootele,sel.anchorNode,sel.anchorOffset);
+    var off2=getPos(rootele,sel.focusNode,sel.focusOffset);
+
     var p1=sel.baseNode.parentElement,p2=sel.extentNode.parentElement;
     if (p1.nodeName!="SPAN"||p2.nodeName!="SPAN") return;
 
-    //if (sel.extentNode && off2>off) {
-    //	sel.empty();
-	//}
 	return {start:off,len:off2-off, selection:sel};
 }
 
@@ -1354,11 +1668,17 @@ var create=function() {
 	var get=function() {
 		return _ranges;
 	}
-	var remove=function() {
+	var removeAll=function() {
 		_ranges=[];
 	}
+	var remove=function(start,len,text) {
+		var idx=find(start,len);
+		if (idx>-1) {
+			_ranges.splice(idx,1);
+		}
+	}
 	var set=function(ranges) {
-		remove();
+		removeAll();
 		for (var i=0;i<ranges.length;i++) {
 			var r=ranges[i];
 			add(r[0],r[1],r[2]);
@@ -1366,6 +1686,7 @@ var create=function() {
 	}
 	textrange.add=add;
 	textrange.get=get;
+	textrange.removeAll=removeAll;
 	textrange.remove=remove;
 	textrange.set=set;
 	textrange.find=find;

@@ -16,6 +16,9 @@ var Link=Reflux.createStore({
 		this.trigger(this.links);
 		//create a intertextual link
 	}
+	,get:function(id) {
+		return this.links[id];
+	}
 	,onFetch:function(){
 		setTimeout(function(){
 			this.trigger(this.links);	
