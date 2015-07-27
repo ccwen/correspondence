@@ -1,1 +1,1 @@
-module.exports=require("reflux").createActions(["set","clear"]);
+module.exports=require("reflux").createActions(["set","setAll","clear"]);

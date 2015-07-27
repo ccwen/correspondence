@@ -11,7 +11,7 @@ module.exports=require("reflux").createActions(["enter","leave"]);
 },{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\actions\\link.js":[function(require,module,exports){
 module.exports=require("reflux").createActions(["add","remove","replace","fetch"]);
 },{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\actions\\selection.js":[function(require,module,exports){
-module.exports=require("reflux").createActions(["set","clear"]);
+module.exports=require("reflux").createActions(["set","setAll","clear"]);
 },{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js":[function(require,module,exports){
 module.exports=require("reflux").createActions(["fetch"]);
 },{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\controls.js":[function(require,module,exports){
@@ -24,7 +24,7 @@ var store_sourcetext=require("./stores/sourcetext");
 var segs=store_sourcetext.segments();
 
 var Controls=React.createClass({displayName: "Controls",
-	startSeg:"1.1"
+	startSeg:"10.5"
   ,addLink:function() {
 		action.add();
 	}
@@ -40,8 +40,8 @@ var Controls=React.createClass({displayName: "Controls",
 	,render:function() {
 		return React.createElement("div", null, 
 				React.createElement(SegNav, {segs: segs, segpat: ".(\\d+\\.\\d+)", value: this.startSeg, onGoSegment: this.onGoSegment}), 
-      		React.createElement("button", {onClick: this.addLink}, "Add Link"), 
-      		React.createElement("button", null, "Remove Link")
+				React.createElement("span", null, "　　"), 
+      	React.createElement("button", {onClick: this.addLink}, "Add Link")
      )
 	}
 });
@@ -2037,6 +2037,11 @@ var Link=Reflux.createStore({
 	,get:function(id) {
 		return this.links[id];
 	}
+	,pluck:function(id) {
+		var sels=this.links[id];
+		delete this.links[id];
+		return sels;
+	}	
 	,onFetch:function(){
 		setTimeout(function(){
 			this.trigger(this.links);	
@@ -2066,6 +2071,10 @@ var action=require("../actions/selection");
 var Link=Reflux.createStore({
 	listenables:action
 	,selections:{}
+	,onSetAll:function(all_selections) {
+		this.selections=JSON.parse(JSON.stringify(all_selections));
+		this.trigger(this.selections);
+	}
 	,onSet:function(id,selections) {
 		this.selections[id]=selections.filter(function(sel){return sel[1]});
 		//automatical search possible other selection
@@ -2082,6 +2091,7 @@ var Link=Reflux.createStore({
 		}
 		return out;
 	}
+
 	,clear:function() {
 		for (var i in this.selections) {
 			this.selections[i]=[];
@@ -2114,7 +2124,15 @@ var SourceText=Reflux.createStore({
 	}
 });
 module.exports=SourceText;
-},{"../actions/sourcetext":"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js","../diamond":"C:\\ksana2015\\correspondence\\src\\diamond.json","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\views\\translations.js":[function(require,module,exports){
+},{"../actions/sourcetext":"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js","../diamond":"C:\\ksana2015\\correspondence\\src\\diamond.json","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\user.js":[function(require,module,exports){
+var Reflux=require("reflux");
+var action=require("../actions/sourcetext");
+
+var User=Reflux.createStore({
+	editable:true
+});
+module.exports=User;
+},{"../actions/sourcetext":"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\views\\translations.js":[function(require,module,exports){
 var React=require("react/addons");
 var Reflux=require("reflux");
 var bs=require("react-bootstrap");
@@ -2128,6 +2146,7 @@ var store_link=require("../stores/link");
 var store_highlight=require("../stores/highlight");
 var store_selection=require("../stores/selection");
 var action_highlight=require("../actions/highlight");
+var User=require("../stores/user");
 
 var Translations=React.createClass({displayName: "Translations",
 	mixins:[Reflux.listenTo(store_link,"onLinkData")
@@ -2162,7 +2181,13 @@ var Translations=React.createClass({displayName: "Translations",
 		action_selection.set(params.sender,sels);
 	}
 	,onClickTag:function(e,reactid,tag) {
-		console.log(tag);
+		if (User.editable) {
+			this.setState({editing:tag});
+			action_highlight.leave(tag);
+
+			var sels=store_link.pluck(tag);
+			action_selection.setAll(sels);
+		}
 	}
 	,getLink:function(uti,format) {
 		var obj={},out=[];
@@ -2202,7 +2227,7 @@ var Translations=React.createClass({displayName: "Translations",
 	}
 })
 module.exports=Translations;
-},{"../actions/highlight":"C:\\ksana2015\\correspondence\\src\\actions\\highlight.js","../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","../stores/highlight":"C:\\ksana2015\\correspondence\\src\\stores\\highlight.js","../stores/link":"C:\\ksana2015\\correspondence\\src\\stores\\link.js","../stores/selection":"C:\\ksana2015\\correspondence\\src\\stores\\selection.js","ksana-layer-react":"C:\\ksana2015\\node_modules\\ksana-layer-react\\index.js","react-bootstrap":"react-bootstrap","react/addons":"react/addons","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\node_modules\\ksana-layer-react\\index.js":[function(require,module,exports){
+},{"../actions/highlight":"C:\\ksana2015\\correspondence\\src\\actions\\highlight.js","../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","../stores/highlight":"C:\\ksana2015\\correspondence\\src\\stores\\highlight.js","../stores/link":"C:\\ksana2015\\correspondence\\src\\stores\\link.js","../stores/selection":"C:\\ksana2015\\correspondence\\src\\stores\\selection.js","../stores/user":"C:\\ksana2015\\correspondence\\src\\stores\\user.js","ksana-layer-react":"C:\\ksana2015\\node_modules\\ksana-layer-react\\index.js","react-bootstrap":"react-bootstrap","react/addons":"react/addons","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\node_modules\\ksana-layer-react\\index.js":[function(require,module,exports){
 var FlattenView=require("./src/flattenview");
 var SelectableView=require("./src/selectableview");
 var InterlineView=require("./src/interlineview");
@@ -3700,9 +3725,10 @@ var SegNav=React.createClass({
 			this.setState({segs:segs,segnow:segnow});
 		}
 	}
-	,goSeg:function(segnow) {
-		this.setState({segnow:segnow});
-		this.props.onGoSegment&&this.props.onGoSegment(this.state.segs[segnow]);
+	,goSeg:function(idx) {
+		this.setState({segnow:idx});
+		this.refs.seg.getDOMNode().value=this.state.segs[idx];
+		this.props.onGoSegment&&this.props.onGoSegment(this.state.segs[idx]);
 	}
 	,prev:function() {
 		var segnow=this.state.segnow;
@@ -3717,13 +3743,20 @@ var SegNav=React.createClass({
 	,onChange:function(e) {
 		var seg=e.target.value;
 		var idx=this.state.segs.indexOf(seg);
-		if (idx>-1) this.goSeg(idx);
+
+		clearTimeout(this.timer);
+		this.timer=setTimeout(function(){
+			if (idx>-1) this.goSeg(idx);
+			else {
+				this.refs.seg.getDOMNode().value=this.state.segs[this.state.segnow];
+			}
+		}.bind(this),1000);
 	}
 	,render : function() {
 		var segname=this.state.segs[this.state.segnow];
-		return E("div",null,
+		return E("span",null,
 			E(this.btn,{onClick:this.prev,disabled:this.state.segnow==0},"←"),
-			E("input",{value:segname,onChange:this.onChange}),
+			E("input",{ref:"seg",defaultValue:segname,onChange:this.onChange}),
 			E(this.btn,{onClick:this.next,disabled:this.state.segnow==this.state.segs.length-1},"→")
 		);
 	}

@@ -19,6 +19,11 @@ var Link=Reflux.createStore({
 	,get:function(id) {
 		return this.links[id];
 	}
+	,pluck:function(id) {
+		var sels=this.links[id];
+		delete this.links[id];
+		return sels;
+	}	
 	,onFetch:function(){
 		setTimeout(function(){
 			this.trigger(this.links);	

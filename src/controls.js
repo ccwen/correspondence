@@ -7,7 +7,7 @@ var store_sourcetext=require("./stores/sourcetext");
 var segs=store_sourcetext.segments();
 
 var Controls=React.createClass({
-	startSeg:"1.1"
+	startSeg:"10.5"
   ,addLink:function() {
 		action.add();
 	}
@@ -23,8 +23,8 @@ var Controls=React.createClass({
 	,render:function() {
 		return <div>
 				<SegNav segs={segs} segpat=".(\d+\.\d+)" value={this.startSeg} onGoSegment={this.onGoSegment}/>
-      		<button onClick={this.addLink}>Add Link</button>
-      		<button>Remove Link</button>
+				<span>　　</span>
+      	<button onClick={this.addLink}>Add Link</button>
      </div>
 	}
 });

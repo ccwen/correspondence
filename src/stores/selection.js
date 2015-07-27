@@ -4,6 +4,10 @@ var action=require("../actions/selection");
 var Link=Reflux.createStore({
 	listenables:action
 	,selections:{}
+	,onSetAll:function(all_selections) {
+		this.selections=JSON.parse(JSON.stringify(all_selections));
+		this.trigger(this.selections);
+	}
 	,onSet:function(id,selections) {
 		this.selections[id]=selections.filter(function(sel){return sel[1]});
 		//automatical search possible other selection
@@ -20,6 +24,7 @@ var Link=Reflux.createStore({
 		}
 		return out;
 	}
+
 	,clear:function() {
 		for (var i in this.selections) {
 			this.selections[i]=[];

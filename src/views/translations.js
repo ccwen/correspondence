@@ -11,6 +11,7 @@ var store_link=require("../stores/link");
 var store_highlight=require("../stores/highlight");
 var store_selection=require("../stores/selection");
 var action_highlight=require("../actions/highlight");
+var User=require("../stores/user");
 
 var Translations=React.createClass({
 	mixins:[Reflux.listenTo(store_link,"onLinkData")
@@ -45,7 +46,13 @@ var Translations=React.createClass({
 		action_selection.set(params.sender,sels);
 	}
 	,onClickTag:function(e,reactid,tag) {
-		console.log(tag);
+		if (User.editable) {
+			this.setState({editing:tag});
+			action_highlight.leave(tag);
+
+			var sels=store_link.pluck(tag);
+			action_selection.setAll(sels);
+		}
 	}
 	,getLink:function(uti,format) {
 		var obj={},out=[];
