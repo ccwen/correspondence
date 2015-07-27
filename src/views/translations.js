@@ -1,10 +1,11 @@
 var React=require("react/addons");
+var E=React.createElement;
+
 var Reflux=require("reflux");
 var bs=require("react-bootstrap");
 var Table=bs.Table;
 var LinkView=require("ksana-layer-react").LinkView;
 var markuputil=require("ksana-layer-react").markuputil;
-var E=React.createElement;
 var action_selection=require("../actions/selection");
 var action_link=require("../actions/link");
 var store_link=require("../stores/link");
@@ -46,7 +47,7 @@ var Translations=React.createClass({
 		action_selection.set(params.sender,sels);
 	}
 	,onClickTag:function(e,reactid,tag) {
-		if (User.editable) {
+		if (User.editable()) {
 			this.setState({editing:tag});
 			action_highlight.leave(tag);
 

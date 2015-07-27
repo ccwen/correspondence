@@ -3,7 +3,7 @@ var action=require("./actions/link");
 var SegNav=require("ksana2015-segnav");
 var action_sourcetext=require("./actions/sourcetext");
 var store_sourcetext=require("./stores/sourcetext");
-
+var LoginBox=require("./views/loginbox");
 var segs=store_sourcetext.segments();
 
 var Controls=React.createClass({
@@ -25,6 +25,7 @@ var Controls=React.createClass({
 				<SegNav segs={segs} segpat=".(\d+\.\d+)" value={this.startSeg} onGoSegment={this.onGoSegment}/>
 				<span>　　</span>
       	<button onClick={this.addLink}>Add Link</button>
+      	<span className="pull-right"><LoginBox/></span>
      </div>
 	}
 });
