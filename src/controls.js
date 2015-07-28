@@ -8,21 +8,22 @@ var segs=store_sourcetext.segments();
 
 var Controls=React.createClass({
 	startSeg:"10.5"
-  ,addLink:function() {
-		action.add();
+	,getInitialState:function() {
+		return {seg:"10.5"}
 	}
-	,clear:function() {
-		actions.clear();
+  ,addLink:function() {
+		action.add(this.state.seg);
 	}
 	,onGoSegment:function(segnow) {
+		this.setState({seg:segnow});
 		action_sourcetext.fetch(segnow);
 	}
 	,componentDidMount:function() {
-		action_sourcetext.fetch(this.startSeg);
+		action_sourcetext.fetch(this.state.seg);
 	}
 	,render:function() {
 		return <div>
-				<SegNav segs={segs} segpat=".(\d+\.\d+)" value={this.startSeg} onGoSegment={this.onGoSegment}/>
+				<SegNav segs={segs} segpat=".(\d+\.\d+)" value={this.state.seg} onGoSegment={this.onGoSegment}/>
 				<span>　　</span>
       	<button onClick={this.addLink}>Add Link</button>
       	<span className="pull-right"><LoginBox/></span>

@@ -27,21 +27,22 @@ var segs=store_sourcetext.segments();
 
 var Controls=React.createClass({displayName: "Controls",
 	startSeg:"10.5"
-  ,addLink:function() {
-		action.add();
+	,getInitialState:function() {
+		return {seg:"10.5"}
 	}
-	,clear:function() {
-		actions.clear();
+  ,addLink:function() {
+		action.add(this.state.seg);
 	}
 	,onGoSegment:function(segnow) {
+		this.setState({seg:segnow});
 		action_sourcetext.fetch(segnow);
 	}
 	,componentDidMount:function() {
-		action_sourcetext.fetch(this.startSeg);
+		action_sourcetext.fetch(this.state.seg);
 	}
 	,render:function() {
 		return React.createElement("div", null, 
-				React.createElement(SegNav, {segs: segs, segpat: ".(\\d+\\.\\d+)", value: this.startSeg, onGoSegment: this.onGoSegment}), 
+				React.createElement(SegNav, {segs: segs, segpat: ".(\\d+\\.\\d+)", value: this.state.seg, onGoSegment: this.onGoSegment}), 
 				React.createElement("span", null, "　　"), 
       	React.createElement("button", {onClick: this.addLink}, "Add Link"), 
       	React.createElement("span", {className: "pull-right"}, React.createElement(LoginBox, null))
@@ -2006,6 +2007,7 @@ module.exports=[
 var Firebase=require("firebase");
 
 var markups=function(key) {
+	key=key.replace(".","_");
 	return new Firebase("https://correspondence.firebaseio.com/markups/"+key);
 }
 
@@ -2025,10 +2027,10 @@ var Highlight=Reflux.createStore({
 	listenables:action_highlight
 	,highlight:""
 	,onEnter:function(linkid) {
-		this.trigger(store_link.get(linkid)||{});
+		this.trigger(store_link.get(linkid)||[]);
 	}
 	,onLeave:function(linkid) {
-		this.trigger({});
+		this.trigger([]);
 	}
 });
 module.exports=Highlight;
@@ -2037,19 +2039,60 @@ var Reflux=require("reflux");
 var action=require("../actions/link");
 var store_selection=require("../stores/selection");
 var action_selection=require("../actions/selection");
-var mockdata=require("./mockdata").links;
+//var mockdata=require("./mockdata").links;
+var firebaseurl=require("./firebaseurl");
 var Link=Reflux.createStore({
 	listenables:action
-	,links:mockdata
-	,onAdd:function() {
+	,links:{}
+	,init:function() {
+		firebaseurl.rootpath("markups").on("child_added",this.markupAdded);
+		firebaseurl.rootpath("markups").on("child_removed",this.markupRemoved);
+		firebaseurl.rootpath("markups").on("child_changed",this.markupChanged);
+	}
+	,updateMarkupsFromSnapshot:function(snapshot,remove) {
+		var markups=snapshot.val();
+		
+		return markups;
+	}
+	,markupAdded:function(childSnapshot,prevChildName) {
+		var r=this.updateMarkupsFromSnapshot(childSnapshot);
+		if (!r) return;
+		//console.log("markup added",r.markup,r.dbid,r.segid);
+		this.links=r;
+		this.trigger(this.links);
+	}
+	,markupRemoved:function(childSnapshot) {
+		var r=this.updateMarkupsFromSnapshot(childSnapshot,"remove");
+		if (!r) return;
+		//console.log("markup removed",r.markup,r.dbid,r.segid);
+		this.links=r;
+		this.trigger(this.links);
+	}
+	,markupChanged:function(childSnapshot) {
+		var r=this.updateMarkupsFromSnapshot(childSnapshot);
+		if (!r) return;
+		//console.log("markup changed",r.markup,r.dbid,r.segid);
+		this.links=r;
+		this.trigger(this.links);
+	}
+	,buildMarkupFromSelections:function(seg,sels) {
+		var markups=[];
+		for (var i in sels) {
+			markups.push( {uti:i , value: sels[i]});
+		}
+		return markups;
+	}
+	,onAdd:function(seg) {
 		var selections=store_selection.get();
 		if (!Object.keys(selections).length)return;
 		action_selection.clear();
 
 		var key='L'+Math.random().toString().substr(2,5);
-		this.links[key]=selections;
-		this.trigger(this.links);
-		//create a intertextual link
+		
+		var ref=firebaseurl.markups(seg).push();
+		var markupid=ref.key();
+		var markups=this.buildMarkupFromSelections(seg,selections);
+		ref.set(markups);
 	}
 	,get:function(id) {
 		return this.links[id];
@@ -2057,31 +2100,22 @@ var Link=Reflux.createStore({
 	,pluck:function(id) {
 		var sels=this.links[id];
 		delete this.links[id];
+		this.trigger(this.links);
 		return sels;
 	}	
-	,onFetch:function(){
-		setTimeout(function(){
-			this.trigger(this.links);	
-		}.bind(this),100);
-		
+	,onFetch:function(uid){
+		firebaseurl.markups(uid).once("value",function(res){
+			this.links={};
+			var data=res.val();
+			for (var key in data) {
+				this.links[key]=data[key];	
+			}
+			this.trigger(this.links);
+		}.bind(this));
 	}
 });
 module.exports=Link;
-},{"../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","../stores/selection":"C:\\ksana2015\\correspondence\\src\\stores\\selection.js","./mockdata":"C:\\ksana2015\\correspondence\\src\\stores\\mockdata.js","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\mockdata.js":[function(require,module,exports){
-var links={
-	"xxx":{
-	"s10.5":[[21,13,"bodhisattven"]]
-	,"k10.5":[[7,3,"諸菩薩"]]
-	,"b10.5":[[7,3,"諸菩薩"]]
-	,"g10.5":[[7,2,"菩薩"]]
-	,"y10.5":[[6,2,"菩薩"]]
-	,"x10.5":[[6,2,"菩薩"]]
-	,"c10.5":[[25,15,"the Bodhisattva"]]
-	,"t10.5":[[21,16,"བྱང་ཆུབ་སེམས་དཔའ་སེམས་དཔའ"]]
-	}
-};
-module.exports={links:links}; 
-},{}],"C:\\ksana2015\\correspondence\\src\\stores\\selection.js":[function(require,module,exports){
+},{"../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","../stores/selection":"C:\\ksana2015\\correspondence\\src\\stores\\selection.js","./firebaseurl":"C:\\ksana2015\\correspondence\\src\\stores\\firebaseurl.js","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\selection.js":[function(require,module,exports){
 var Reflux=require("reflux");
 var action=require("../actions/selection");
 
@@ -2120,6 +2154,7 @@ module.exports=Link;
 },{"../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\sourcetext.js":[function(require,module,exports){
 var Reflux=require("reflux");
 var action=require("../actions/sourcetext");
+var action_link=require("../actions/link");
 var data=require("../diamond");
 var versions={"s":"sanskrit","k":"kumarajiva","b":"bodhiruci","g":"gupta"
   ,"y":"yijing","x":"xuanzang","t":"tibetan","c":"conze"}
@@ -2134,6 +2169,7 @@ var SourceText=Reflux.createStore({
 				out.push([version,key[0]+seg, data[key]]);
 			}
 		}
+		action_link.fetch(seg);
 		this.trigger(out,seg);
 	}
 	,segments:function() {
@@ -2141,7 +2177,7 @@ var SourceText=Reflux.createStore({
 	}
 });
 module.exports=SourceText;
-},{"../actions/sourcetext":"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js","../diamond":"C:\\ksana2015\\correspondence\\src\\diamond.json","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\user.js":[function(require,module,exports){
+},{"../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/sourcetext":"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js","../diamond":"C:\\ksana2015\\correspondence\\src\\diamond.json","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\user.js":[function(require,module,exports){
 var Reflux=require("reflux");
 var firebaseurl=require("./firebaseurl");
 var actions=require("../actions/user");
@@ -2272,10 +2308,32 @@ var Translations=React.createClass({displayName: "Translations",
 	,onSelectionData:function(selections){
 		this.setState({selections:selections});
 	}
-	,onLinkData:function(links) {
+	,fromRawlinks:function(rawlinks) {
+		var links={};
+		for (var key in rawlinks) {
+			var markups=rawlinks[key];
+			var m={};
+			for (var i in markups) {
+				m [markups[i].uti ] = markups[i].value;
+			}
+			links[key]=m;
+		}
+		return links;
+	}
+	,fromRawArray:function(rawarray) {
+		var out={};
+		if (rawarray) rawarray.forEach(function(h){
+			out[h.uti] = h.value;
+		});
+		return out;
+	}
+	,onLinkData:function(rawlinks) {
+		var links=this.fromRawlinks(rawlinks)
 		this.setState({links:links});
 	}
-	,onHighlightData:function(highlights) {
+	,onHighlightData:function(rawhighlight) {
+		var highlights=this.fromRawArray();
+
 		this.setState({highlights:highlights});
 	}
 	,onEnterTag:function(e,tid,linkid) {
@@ -2284,9 +2342,6 @@ var Translations=React.createClass({displayName: "Translations",
 	,onLeaveTag:function(e,tid,linkid) {
 		action_highlight.leave(linkid);
 	}
-	,componentDidMount:function(){
-		action_link.fetch();
-	}
 	,onSelectText:function(start,len,text,params,sels) {
 		var links=this.getLink(params.sender,"array");
 		var overlapped=markuputil.hasOverlap(start+1,len-2,links);
@@ -2294,12 +2349,19 @@ var Translations=React.createClass({displayName: "Translations",
 
 		action_selection.set(params.sender,sels);
 	}
+	,noSelection:function() {
+		var c=0;
+		for (var i in this.state.selections) {
+			c+=this.state.selections[i].length;
+		}
+		return c===0;
+	}
 	,onClickTag:function(e,reactid,tag) {
-		if (User.editable()) {
+		if (User.editable() && this.noSelection()) {
 			this.setState({editing:tag});
 			action_highlight.leave(tag);
 
-			var sels=store_link.pluck(tag);
+			var sels=this.fromRawArray(store_link.pluck(tag));
 			action_selection.setAll(sels);
 		}
 	}

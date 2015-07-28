@@ -24,10 +24,32 @@ var Translations=React.createClass({
 	,onSelectionData:function(selections){
 		this.setState({selections:selections});
 	}
-	,onLinkData:function(links) {
+	,fromRawlinks:function(rawlinks) {
+		var links={};
+		for (var key in rawlinks) {
+			var markups=rawlinks[key];
+			var m={};
+			for (var i in markups) {
+				m [markups[i].uti ] = markups[i].value;
+			}
+			links[key]=m;
+		}
+		return links;
+	}
+	,fromRawArray:function(rawarray) {
+		var out={};
+		if (rawarray) rawarray.forEach(function(h){
+			out[h.uti] = h.value;
+		});
+		return out;
+	}
+	,onLinkData:function(rawlinks) {
+		var links=this.fromRawlinks(rawlinks)
 		this.setState({links:links});
 	}
-	,onHighlightData:function(highlights) {
+	,onHighlightData:function(rawhighlight) {
+		var highlights=this.fromRawArray();
+
 		this.setState({highlights:highlights});
 	}
 	,onEnterTag:function(e,tid,linkid) {
@@ -36,9 +58,6 @@ var Translations=React.createClass({
 	,onLeaveTag:function(e,tid,linkid) {
 		action_highlight.leave(linkid);
 	}
-	,componentDidMount:function(){
-		action_link.fetch();
-	}
 	,onSelectText:function(start,len,text,params,sels) {
 		var links=this.getLink(params.sender,"array");
 		var overlapped=markuputil.hasOverlap(start+1,len-2,links);
@@ -46,12 +65,19 @@ var Translations=React.createClass({
 
 		action_selection.set(params.sender,sels);
 	}
+	,noSelection:function() {
+		var c=0;
+		for (var i in this.state.selections) {
+			c+=this.state.selections[i].length;
+		}
+		return c===0;
+	}
 	,onClickTag:function(e,reactid,tag) {
-		if (User.editable()) {
+		if (User.editable() && this.noSelection()) {
 			this.setState({editing:tag});
 			action_highlight.leave(tag);
 
-			var sels=store_link.pluck(tag);
+			var sels=this.fromRawArray(store_link.pluck(tag));
 			action_selection.setAll(sels);
 		}
 	}

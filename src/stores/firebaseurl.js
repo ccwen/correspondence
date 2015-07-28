@@ -1,6 +1,7 @@
 var Firebase=require("firebase");
 
 var markups=function(key) {
+	key=key.replace(".","_");
 	return new Firebase("https://correspondence.firebaseio.com/markups/"+key);
 }
 

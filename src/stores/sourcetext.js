@@ -1,5 +1,6 @@
 var Reflux=require("reflux");
 var action=require("../actions/sourcetext");
+var action_link=require("../actions/link");
 var data=require("../diamond");
 var versions={"s":"sanskrit","k":"kumarajiva","b":"bodhiruci","g":"gupta"
   ,"y":"yijing","x":"xuanzang","t":"tibetan","c":"conze"}
@@ -14,6 +15,7 @@ var SourceText=Reflux.createStore({
 				out.push([version,key[0]+seg, data[key]]);
 			}
 		}
+		action_link.fetch(seg);
 		this.trigger(out,seg);
 	}
 	,segments:function() {
