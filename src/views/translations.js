@@ -48,7 +48,7 @@ var Translations=React.createClass({
 		this.setState({links:links});
 	}
 	,onHighlightData:function(rawhighlight) {
-		var highlights=this.fromRawArray();
+		var highlights=this.fromRawArray(rawhighlight);
 
 		this.setState({highlights:highlights});
 	}
