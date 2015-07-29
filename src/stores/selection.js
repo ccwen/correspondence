@@ -4,9 +4,9 @@ var action=require("../actions/selection");
 var Link=Reflux.createStore({
 	listenables:action
 	,selections:{}
-	,onSetAll:function(all_selections) {
+	,onSetAll:function(all_selections,ownermarkup) {
 		this.selections=JSON.parse(JSON.stringify(all_selections));
-		this.trigger(this.selections);
+		this.trigger(this.selections,ownermarkup);
 	}
 	,onSet:function(id,selections) {
 		this.selections[id]=selections.filter(function(sel){return sel[1]});
@@ -31,5 +31,13 @@ var Link=Reflux.createStore({
 		}
 		this.trigger(this.selections);
 	}
+	,isEmpty:function() {
+		var c=0;
+		for (var i in this.selections) {
+			c+=this.selections[i].length;
+		}
+		return c===0;
+	}
+	
 });
 module.exports=Link;

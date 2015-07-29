@@ -43,17 +43,14 @@ var Translations=React.createClass({
 		});
 		return out;
 	}
-	,onLinkData:function(rawlinks) {
-		var links=this.fromRawlinks(rawlinks)
+	,onLinkData:function(links) {
 		this.setState({links:links});
 	}
-	,onHighlightData:function(rawhighlight) {
-		var highlights=this.fromRawArray(rawhighlight);
-
+	,onHighlightData:function(highlights) {
 		this.setState({highlights:highlights});
 	}
 	,onEnterTag:function(e,tid,linkid) {
-		action_highlight.enter(linkid);
+		if (store_selection.isEmpty())	action_highlight.enter(linkid);
 	}
 	,onLeaveTag:function(e,tid,linkid) {
 		action_highlight.leave(linkid);
@@ -65,20 +62,10 @@ var Translations=React.createClass({
 
 		action_selection.set(params.sender,sels);
 	}
-	,noSelection:function() {
-		var c=0;
-		for (var i in this.state.selections) {
-			c+=this.state.selections[i].length;
-		}
-		return c===0;
-	}
 	,onClickTag:function(e,reactid,tag) {
-		if (User.editable() && this.noSelection()) {
-			this.setState({editing:tag});
+		if (User.editable() && store_selection.isEmpty()) {
 			action_highlight.leave(tag);
-
-			var sels=this.fromRawArray(store_link.pluck(tag));
-			action_selection.setAll(sels);
+			action_selection.setAll(store_link.pluck(tag),tag);
 		}
 	}
 	,getLink:function(uti,format) {

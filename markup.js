@@ -20,17 +20,17 @@ var deploy=function(path,key,json,overwrite) {
 
 var markups=
 {
-		"xxx":[
-		 {"uti":"s10.5","value":[[21,13,"bodhisattven"]]}
-		,{"uti":"k10.5","value":[[7,3,"諸菩薩"]]}
-		,{"uti":"b10.5","value":[[7,3,"諸菩薩"]]}
-		,{"uti":"g10.5","value":[[7,2,"菩薩"]]}
-		,{"uti":"y10.5","value":[[6,2,"菩薩"]]}
-		,{"uti":"x10.5","value":[[6,2,"菩薩"]]}
-		,{"uti":"c10.5","value":[[25,15,"the Bodhisattva"]]}
-		,{"uti":"t10.5","value":[[21,16,"བྱང་ཆུབ་སེམས་དཔའ་སེམས་དཔའ"]]}
-	]
+		"xxx":{
+		 "s10-5":[[21,13,"bodhisattven"]]
+		,"k10-5":[[7,3,"諸菩薩"]]
+		,"b10-5":[[7,3,"諸菩薩"]]
+		,"g10-5":[[7,2,"菩薩"]]
+		,"y10-5":[[6,2,"菩薩"]]
+		,"x10-5":[[6,2,"菩薩"]]
+		,"c10-5":[[25,15,"the Bodhisattva"]]
+		,"t10-5":[[21,16,"བྱང་ཆུབ་སེམས་དཔའ་སེམས་དཔའ"]]
+	}
 }
 
 var overwrite=true;
-deploy("markups","10_5",markups,overwrite);
+deploy("markups","10-5",markups,overwrite);

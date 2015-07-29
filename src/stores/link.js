@@ -1,41 +1,35 @@
 var Reflux=require("reflux");
 var action=require("../actions/link");
 var store_selection=require("../stores/selection");
-var action_selection=require("../actions/selection");
 //var mockdata=require("./mockdata").links;
 var firebaseurl=require("./firebaseurl");
 var Link=Reflux.createStore({
 	listenables:action
 	,links:{}
-	,init:function() {
-		firebaseurl.rootpath("markups").on("child_added",this.markupAdded);
-		firebaseurl.rootpath("markups").on("child_removed",this.markupRemoved);
-		firebaseurl.rootpath("markups").on("child_changed",this.markupChanged);
-	}
 	,updateMarkupsFromSnapshot:function(snapshot,remove) {
-		var markups=snapshot.val();
-		
+		var markups=snapshot.val();		
 		return markups;
 	}
 	,markupAdded:function(childSnapshot,prevChildName) {
 		var r=this.updateMarkupsFromSnapshot(childSnapshot);
 		if (!r) return;
-		//console.log("markup added",r.markup,r.dbid,r.segid);
-		this.links=r;
+		var key=childSnapshot.ref().key();
+		this.links[key]=r;
 		this.trigger(this.links);
 	}
 	,markupRemoved:function(childSnapshot) {
 		var r=this.updateMarkupsFromSnapshot(childSnapshot,"remove");
 		if (!r) return;
-		//console.log("markup removed",r.markup,r.dbid,r.segid);
-		this.links=r;
+		var key=childSnapshot.ref().key();
+		delete this.links[key];
+		this.links;
 		this.trigger(this.links);
 	}
 	,markupChanged:function(childSnapshot) {
 		var r=this.updateMarkupsFromSnapshot(childSnapshot);
 		if (!r) return;
-		//console.log("markup changed",r.markup,r.dbid,r.segid);
-		this.links=r;
+		var key=childSnapshot.ref().key();
+		this.links[key]=r;
 		this.trigger(this.links);
 	}
 	,buildMarkupFromSelections:function(seg,sels) {
@@ -45,28 +39,49 @@ var Link=Reflux.createStore({
 		}
 		return markups;
 	}
-	,onAdd:function(seg) {
+	,onCancelEdit:function() {
+		if (!this.uid) return;
+		this.onFetch(this.uid);
+	}
+	,onRemove:function(seg,markupkey) {
+		firebaseurl.markups(seg).child(markupkey).remove();
+	}
+	,onSet:function(seg,markupkey) {
 		var selections=store_selection.get();
 		if (!Object.keys(selections).length)return;
-		action_selection.clear();
-
-		var key='L'+Math.random().toString().substr(2,5);
-		
-		var ref=firebaseurl.markups(seg).push();
-		var markupid=ref.key();
-		var markups=this.buildMarkupFromSelections(seg,selections);
-		ref.set(markups);
+		var ref=null;
+		if (markupkey)	 {
+			ref=firebaseurl.markups(seg).child(markupkey);
+		} else {
+			ref=firebaseurl.markups(seg).push();	
+		}
+		//var markupid=ref.key();
+		ref.set(selections);
 	}
 	,get:function(id) {
 		return this.links[id];
 	}
 	,pluck:function(id) {
 		var sels=this.links[id];
+
 		delete this.links[id];
 		this.trigger(this.links);
 		return sels;
 	}	
 	,onFetch:function(uid){
+
+		if (this.uid!==uid) {
+			if (this.uid) {
+				firebaseurl.markups(uid).off();
+			} else {
+				firebaseurl.markups(uid).on("child_added",this.markupAdded);
+				firebaseurl.markups(uid).on("child_removed",this.markupRemoved);
+				firebaseurl.markups(uid).on("child_changed",this.markupChanged);			
+			}			
+		}
+
+		this.uid=uid;
+
 		firebaseurl.markups(uid).once("value",function(res){
 			this.links={};
 			var data=res.val();

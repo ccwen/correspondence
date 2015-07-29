@@ -46,8 +46,9 @@ var LoginBox=React.createClass({
   ,renderUser:function() {
     return (<div style={{textAlign:"center"}}>
         <span style={{fontSize:"60%"}}>{this.state.auth.google.displayName}</span>
-        <img style={{borderRadius:"50%"}} src={this.state.photourl}/>
         <button onClick={this.signOut}>Sign Out</button>
+        <br/><img style={{borderRadius:"50%"}} src={this.state.photourl}/>
+        
       </div>
       );
   }
