@@ -2084,6 +2084,7 @@ var firebaseurl=require("./firebaseurl");
 var Link=Reflux.createStore({
 	listenables:action
 	,links:{}
+	,savingToFirebase:false
 	,updateMarkupsFromSnapshot:function(snapshot,remove) {
 		var markups=snapshot.val();		
 		return markups;
@@ -2125,16 +2126,19 @@ var Link=Reflux.createStore({
 		firebaseurl.markups(seg).child(markupkey).remove();
 	}
 	,onSet:function(seg,markupkey) {
+		if (this.savingToFirebase) return;
 		var selections=store_selection.get();
 		if (!Object.keys(selections).length)return;
 		var ref=null;
 		if (markupkey)	 {
 			ref=firebaseurl.markups(seg).child(markupkey);
 		} else {
-			ref=firebaseurl.markups(seg).push();	
+			ref=firebaseurl.markups(seg).push();
 		}
-		//var markupid=ref.key();
-		ref.set(selections);
+		this.savingToFirebase=true;
+		ref.set(selections,function(){
+			this.savingToFirebase=false;
+		}.bind(this));
 	}
 	,get:function(id) {
 		return this.links[id];
@@ -3970,6 +3974,39 @@ var SelectableView=React.createClass({
 		var cancel=sel&&this.markSelection(sel.start,sel.len,text,
 			{ctrlKey:e.ctrlKey,shiftKey:e.shiftKey,sender:this.props.id});
 		if (!cancel) this.selection=sel;
+		if (sel.len==0) {
+			this.caretPos=sel.start;
+		}
+	}
+	,setCaretPos:function(domnode,offset) {
+		var range = document.createRange();
+		if (offset<0 || offset>domnode.length)return;
+		range.setStart(domnode,offset);
+		range.setEnd(domnode,offset);
+		 
+		var sel = window.getSelection(); 
+		sel.removeAllRanges();
+		sel.addRange(range); 
+	}
+	,restoreCaret:function(p) {
+		var nodes=this.getDOMNode().childNodes;
+		var node=nodes[0];
+		var start=parseInt(node.dataset.start);
+
+		for (var i=0;i<nodes.length;i++) {
+			if (start>p || i===nodes.length-1) {
+				var offset=p-parseInt(nodes[i].dataset.start);
+				this.setCaretPos(nodes[i].childNodes[0],offset);
+				return;
+			}
+			node=nodes[i];
+			start=parseInt(node.dataset.start);
+		}
+	}
+	,componentDidUpdate:function() {
+		if (!this.caretPos) return;
+		this.restoreCaret(this.caretPos);
+		this.caretPos=0;
 	}
 	,onFocus:function(e){
 	}
@@ -4744,6 +4781,8 @@ var checkIfBundleUpdated=function() {
 	});
 }
 var livereload=function() {
+	if(window.location.origin.indexOf("//127.0.0.1")===-1) return;
+
 	if (started) return;
 
 	timer1=setInterval(function(){

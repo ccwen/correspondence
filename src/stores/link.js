@@ -6,6 +6,7 @@ var firebaseurl=require("./firebaseurl");
 var Link=Reflux.createStore({
 	listenables:action
 	,links:{}
+	,savingToFirebase:false
 	,updateMarkupsFromSnapshot:function(snapshot,remove) {
 		var markups=snapshot.val();		
 		return markups;
@@ -47,16 +48,19 @@ var Link=Reflux.createStore({
 		firebaseurl.markups(seg).child(markupkey).remove();
 	}
 	,onSet:function(seg,markupkey) {
+		if (this.savingToFirebase) return;
 		var selections=store_selection.get();
 		if (!Object.keys(selections).length)return;
 		var ref=null;
 		if (markupkey)	 {
 			ref=firebaseurl.markups(seg).child(markupkey);
 		} else {
-			ref=firebaseurl.markups(seg).push();	
+			ref=firebaseurl.markups(seg).push();
 		}
-		//var markupid=ref.key();
-		ref.set(selections);
+		this.savingToFirebase=true;
+		ref.set(selections,function(){
+			this.savingToFirebase=false;
+		}.bind(this));
 	}
 	,get:function(id) {
 		return this.links[id];
