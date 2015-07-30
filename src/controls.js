@@ -3,6 +3,7 @@ var Reflux=require("reflux");
 var E=React.createElement;
 var bs=require("react-bootstrap");
 var action_link=require("./actions/link");
+var action_suggest=require("./actions/suggest");
 var SegNav=require("ksana2015-segnav");
 var action_sourcetext=require("./actions/sourcetext");
 var action_selection=require("./actions/selection");
@@ -14,17 +15,18 @@ var styles={
 	controls:{fontSize:"150%"}
 }
 var Controls=React.createClass({
-	startSeg:"10-5"
-	,mixins:[Reflux.listenTo(store_selection,"onSelectionData")]
+	mixins:[Reflux.listenTo(store_selection,"onSelectionData")]
 	,onSelectionData:function(sels,markupkey) {
 		if (markupkey) this.setState({editing:markupkey});
 		else this.forceUpdate();
 	}
 	,getInitialState:function() {
-		return {seg:"10-5",editing:null}
+		var lastseg=localStorage.getItem("correspondence.seg")||"1-1";
+		return {seg:lastseg,editing:null}
 	}
   ,addLink:function() {
 		action_link.set(this.state.seg);
+		action_suggest.add( store_selection.get() );
 		action_selection.clear();		
 	}
 	,changeLink:function() {
@@ -44,7 +46,12 @@ var Controls=React.createClass({
 	}
 	,onGoSegment:function(segnow) {
 		this.setState({seg:segnow});
-		action_sourcetext.fetch(segnow);
+		action_selection.clear();
+		action_sourcetext.fetch(segnow,function(err){
+			if (!err) {
+				localStorage.setItem("correspondence.seg",segnow);
+			}
+		});
 	}
 	,componentDidMount:function() {
 		action_sourcetext.fetch(this.state.seg);

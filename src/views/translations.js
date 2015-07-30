@@ -8,16 +8,19 @@ var LinkView=require("ksana-layer-react").LinkView;
 var markuputil=require("ksana-layer-react").markuputil;
 var action_selection=require("../actions/selection");
 var action_link=require("../actions/link");
+var action_suggest=require("../actions/suggest");
 var store_link=require("../stores/link");
 var store_highlight=require("../stores/highlight");
 var store_selection=require("../stores/selection");
+var store_suggest=require("../stores/suggest");
 var action_highlight=require("../actions/highlight");
 var User=require("../stores/user");
 
 var Translations=React.createClass({
 	mixins:[Reflux.listenTo(store_link,"onLinkData")
 					,Reflux.listenTo(store_selection,"onSelectionData")
-					,Reflux.listenTo(store_highlight,"onHighlightData")]
+					,Reflux.listenTo(store_highlight,"onHighlightData")
+					,Reflux.listenTo(store_suggest,"onSuggestData")]
 	,getInitialState:function(){
 		return {links:{},selections:{},highlights:{}};
 	}
@@ -46,6 +49,14 @@ var Translations=React.createClass({
 	,onLinkData:function(links) {
 		this.setState({links:links});
 	}
+	,onSuggestData:function(suggestions,sels) {
+		//TODO: change to immutable
+		var selections=this.state.selections;
+		for (var i in sels) {
+			if (sels[i]) selections[i]=sels[i];
+		}
+		this.setState({selections:selections});
+	}
 	,onHighlightData:function(highlights) {
 		this.setState({highlights:highlights});
 	}
@@ -59,6 +70,10 @@ var Translations=React.createClass({
 		var links=this.getLink(params.sender,"array");
 		var overlapped=markuputil.hasOverlap(start+1,len-2,links);
 		if (overlapped) return true;
+
+		if (params.sender[0]=="s" && len>0) {
+			action_suggest.get(text,this.props.data,this.state.links);
+		}
 
 		action_selection.set(params.sender,sels);
 	}

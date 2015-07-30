@@ -14,6 +14,8 @@ module.exports=require("reflux").createActions(["set","remove","fetch","cancelEd
 module.exports=require("reflux").createActions(["set","setAll","clear"]);
 },{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js":[function(require,module,exports){
 module.exports=require("reflux").createActions(["fetch"]);
+},{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\actions\\suggest.js":[function(require,module,exports){
+module.exports=require("reflux").createActions(["get","add"]);;
 },{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\actions\\user.js":[function(require,module,exports){
 module.exports=require("reflux").createActions(["login","logout"]);;
 },{"reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\controls.js":[function(require,module,exports){
@@ -22,6 +24,7 @@ var Reflux=require("reflux");
 var E=React.createElement;
 var bs=require("react-bootstrap");
 var action_link=require("./actions/link");
+var action_suggest=require("./actions/suggest");
 var SegNav=require("ksana2015-segnav");
 var action_sourcetext=require("./actions/sourcetext");
 var action_selection=require("./actions/selection");
@@ -33,17 +36,18 @@ var styles={
 	controls:{fontSize:"150%"}
 }
 var Controls=React.createClass({displayName: "Controls",
-	startSeg:"10-5"
-	,mixins:[Reflux.listenTo(store_selection,"onSelectionData")]
+	mixins:[Reflux.listenTo(store_selection,"onSelectionData")]
 	,onSelectionData:function(sels,markupkey) {
 		if (markupkey) this.setState({editing:markupkey});
 		else this.forceUpdate();
 	}
 	,getInitialState:function() {
-		return {seg:"10-5",editing:null}
+		var lastseg=localStorage.getItem("correspondence.seg")||"1-1";
+		return {seg:lastseg,editing:null}
 	}
   ,addLink:function() {
 		action_link.set(this.state.seg);
+		action_suggest.add( store_selection.get() );
 		action_selection.clear();		
 	}
 	,changeLink:function() {
@@ -63,7 +67,12 @@ var Controls=React.createClass({displayName: "Controls",
 	}
 	,onGoSegment:function(segnow) {
 		this.setState({seg:segnow});
-		action_sourcetext.fetch(segnow);
+		action_selection.clear();
+		action_sourcetext.fetch(segnow,function(err){
+			if (!err) {
+				localStorage.setItem("correspondence.seg",segnow);
+			}
+		});
 	}
 	,componentDidMount:function() {
 		action_sourcetext.fetch(this.state.seg);
@@ -92,7 +101,7 @@ var Controls=React.createClass({displayName: "Controls",
 });
 
 module.exports=Controls;
-},{"./actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","./actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","./actions/sourcetext":"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js","./stores/selection":"C:\\ksana2015\\correspondence\\src\\stores\\selection.js","./stores/sourcetext":"C:\\ksana2015\\correspondence\\src\\stores\\sourcetext.js","./views/loginbox":"C:\\ksana2015\\correspondence\\src\\views\\loginbox.js","ksana2015-segnav":"C:\\ksana2015\\node_modules\\ksana2015-segnav\\index.js","react":"react","react-bootstrap":"react-bootstrap","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\diamond.json":[function(require,module,exports){
+},{"./actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","./actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","./actions/sourcetext":"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js","./actions/suggest":"C:\\ksana2015\\correspondence\\src\\actions\\suggest.js","./stores/selection":"C:\\ksana2015\\correspondence\\src\\stores\\selection.js","./stores/sourcetext":"C:\\ksana2015\\correspondence\\src\\stores\\sourcetext.js","./views/loginbox":"C:\\ksana2015\\correspondence\\src\\views\\loginbox.js","ksana2015-segnav":"C:\\ksana2015\\node_modules\\ksana2015-segnav\\index.js","react":"react","react-bootstrap":"react-bootstrap","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\diamond.json":[function(require,module,exports){
 module.exports={
 "s0-0": "vajracchedikā prajñāpāramitā",
 "s1-1": " evaṃ mayā śrutam ekasmin samaye |",
@@ -2007,8 +2016,8 @@ module.exports={
 "c1-5":"Then many monks approached to where the Lord was, saluted his feet with their heads, thrice walked round him to the right, and sat down on one side.",
 "c2-1":"At that time the Venerable Subhuti came to that assembly, and sat down.",
 "c2-2":"Then he rose from his seat, put his upper robe over one shoulder, placed his right knee on the ground, bent forth his folded hands towards the Lord, and said to the Lord:",
-"c2-3":"'It is wonderful O Lord, it is exceedingly wonderful, O Well-Gone, how much the Bodhisattvas, the great beings, have been helped with the greatest help by the Tathagata, the Arhat, the Fully Enlightened One.",
-"c2-4":"It is wonderful, O Lord, how much the Bodhisattvas, the great beings, have been favoured with the highest favour by the Tathagata, the Arhat, the Fully Enlightened One. How then, O Lord, should a son or daughter of good family, who have set out in the Bodhisattva-vehicle, stand, how progress, how control their thoughts?'",
+"c2-3":"'It is wonderful O Lord, it is exceedingly wonderful, O Well-Gone, how much the Bodhisattvas, the great beings, have been helped with the greatest help by the Tathagata, the Arhat, the Fully Enlightened One. It is wonderful, O Lord, how much the Bodhisattvas, the great beings, have been favoured with the highest favour by the Tathagata, the Arhat, the Fully Enlightened One.",
+"c2-4":"How then, O Lord, should a son or daughter of good family, who have set out in the Bodhisattva-vehicle, stand, how progress, how control their thoughts?'",
 "c2-5":"After these words the Lord said to the Venerable Subhuti: 'Well said, well said, Subhuti! So it is, Subhuti, so it is, as you say!",
 "c2-6":"The Tathagata, Subhuti, has helped the Bodhisattvas, the great beings with the greatest help, and he has favoured them with the highest favour. ",
 "c2-7":"Therefore, 'Subhuti, listen well, and attentively! I will teach you how those who have set out in the Bodhisattva vehicle should stand, how progress, how control their thoughts.'",
@@ -2288,8 +2297,11 @@ module.exports=[
 var Firebase=require("firebase");
 
 var markups=function(key) {
-	key=key.replace(".","_");
 	return new Firebase("https://correspondence.firebaseio.com/markups/"+key);
+}
+
+var correspond=function(key) {
+	return new Firebase("https://correspondence.firebaseio.com/correspond/"+key);	
 }
 
 var user=function() {
@@ -2298,7 +2310,7 @@ var user=function() {
 var rootpath=function(path){
 	return new Firebase("https://correspondence.firebaseio.com/"+path);
 }
-module.exports={markups:markups,user:user,rootpath:rootpath};
+module.exports={markups:markups,user:user,rootpath:rootpath,correspond:correspond};
 },{"firebase":"C:\\ksana2015\\node_modules\\firebase\\lib\\firebase-web.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\highlight.js":[function(require,module,exports){
 var Reflux=require("reflux");
 var store_link=require("../stores/link");
@@ -2465,11 +2477,11 @@ var action=require("../actions/sourcetext");
 var action_link=require("../actions/link");
 var data=require("../diamond");
 var versions={"s":"sanskrit","k":"kumarajiva","b":"bodhiruci","g":"gupta"
-  ,"y":"yijing","x":"xuanzang","t":"tibetan","c":"conze"}
+  ,"y":"yijing","x":"xuanzang","t":"tibetan","c":"conze","p":"paramartha"}
 
 var SourceText=Reflux.createStore({
 	listenables:action
-	,onFetch:function(seg) {
+	,onFetch:function(seg,cb) {
 		var out=[];
 		for (var key in data) {
 			var version=versions[key[0]];
@@ -2478,14 +2490,112 @@ var SourceText=Reflux.createStore({
 			}
 		}
 		action_link.fetch(seg);
+
 		this.trigger(out,seg);
+		if (typeof cb=="function") out.length?cb(0):cb("not found");
 	}
 	,segments:function() {
 		return Object.keys(data);
 	}
 });
 module.exports=SourceText;
-},{"../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/sourcetext":"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js","../diamond":"C:\\ksana2015\\correspondence\\src\\diamond.json","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\user.js":[function(require,module,exports){
+},{"../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/sourcetext":"C:\\ksana2015\\correspondence\\src\\actions\\sourcetext.js","../diamond":"C:\\ksana2015\\correspondence\\src\\diamond.json","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\suggest.js":[function(require,module,exports){
+var Reflux=require("reflux");
+var endpoint=require("./endpoint");
+var actions=require("../actions/suggest");
+
+var Suggest=Reflux.createStore({
+	listenables: actions
+	,init:function() {
+
+	}
+	,tagPositions:function(existingtags) {
+		var out={};
+		for (var i in existingtags) {
+			var obj=existingtags[i];
+			for (var uid in obj) {
+				var tags=obj[uid];
+				for (var j in tags) {
+					var start=tags[j][0];
+					if (!out[uid]) out[uid]=[];
+					out[uid].push(start);
+				}
+			}
+		}
+		for (var i in out) out[i].sort();
+		return out;
+	}
+	,genCorrespondFromSelections:function(sels) {
+		var out={key:"",correspond:[]};
+		for (var i in sels) {
+			var w=sels[i][0][2];
+			if (i[0]=="s") { //sanskrit
+				out.key=w;
+			} else {
+				if (out.correspond.indexOf(w)===-1) {
+					out.correspond.push(sels[i][0][2]);	
+				}
+			}
+		}
+		return out;
+	}
+	,onAdd:function(sels) {
+		var sel=this.genCorrespondFromSelections(sels);
+		if (!sel.key) return;
+
+		endpoint.correspond(sel.key).once("value",function(res){
+			var correspond=res.val() || [];
+			for (var i=0;i<correspond.length;i++) {
+				if (sel.correspond.indexOf(correspond[i])==-1){
+					sel.correspond.push(correspond[i]);
+				}
+			}
+
+			res.ref().set(sel.correspond);
+		});
+	}
+	,onGet:function(key,sourcetext,existingtags) {
+
+		endpoint.correspond(key).once("value",function(res){
+			var correspond=res.val();
+			if (!correspond)return;
+			var tagpos=this.tagPositions(existingtags);
+
+			var sels=this.findIn(correspond,sourcetext,tagpos);
+			setTimeout(function(){
+				this.trigger(correspond,sels);	
+			}.bind(this),100);
+		}.bind(this));
+	}
+	,findIn:function(correspond,sourcetext,tagpos) {
+		var sels={};
+		for (var i=0;i<sourcetext.length;i++) {
+			var text=sourcetext[i][2], uid=sourcetext[i][1];
+			for (var j=0;j<correspond.length;j++) {
+				var w=correspond[j],s=0,idx=0;
+				do {
+					idx=text.indexOf(w,s);
+					if (idx>-1) {
+						if (tagpos[uid] && tagpos[uid].indexOf(idx)>-1) {
+							s=idx+1;
+							continue;
+						}
+						break;
+					}
+				} while (idx>-1);
+
+				if (idx>-1) {
+					if (!sels[uid]) sels[uid]=[];
+					sels[uid].push( [idx,w.length,w]);
+				}
+			}
+		}
+		return sels;
+	}
+});
+
+module.exports=Suggest;
+},{"../actions/suggest":"C:\\ksana2015\\correspondence\\src\\actions\\suggest.js","./endpoint":"C:\\ksana2015\\correspondence\\src\\stores\\endpoint.js","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\correspondence\\src\\stores\\user.js":[function(require,module,exports){
 var Reflux=require("reflux");
 var endpoint=require("./endpoint");
 var actions=require("../actions/user");
@@ -2601,16 +2711,19 @@ var LinkView=require("ksana-layer-react").LinkView;
 var markuputil=require("ksana-layer-react").markuputil;
 var action_selection=require("../actions/selection");
 var action_link=require("../actions/link");
+var action_suggest=require("../actions/suggest");
 var store_link=require("../stores/link");
 var store_highlight=require("../stores/highlight");
 var store_selection=require("../stores/selection");
+var store_suggest=require("../stores/suggest");
 var action_highlight=require("../actions/highlight");
 var User=require("../stores/user");
 
 var Translations=React.createClass({displayName: "Translations",
 	mixins:[Reflux.listenTo(store_link,"onLinkData")
 					,Reflux.listenTo(store_selection,"onSelectionData")
-					,Reflux.listenTo(store_highlight,"onHighlightData")]
+					,Reflux.listenTo(store_highlight,"onHighlightData")
+					,Reflux.listenTo(store_suggest,"onSuggestData")]
 	,getInitialState:function(){
 		return {links:{},selections:{},highlights:{}};
 	}
@@ -2639,6 +2752,14 @@ var Translations=React.createClass({displayName: "Translations",
 	,onLinkData:function(links) {
 		this.setState({links:links});
 	}
+	,onSuggestData:function(suggestions,sels) {
+		//TODO: change to immutable
+		var selections=this.state.selections;
+		for (var i in sels) {
+			if (sels[i]) selections[i]=sels[i];
+		}
+		this.setState({selections:selections});
+	}
 	,onHighlightData:function(highlights) {
 		this.setState({highlights:highlights});
 	}
@@ -2652,6 +2773,10 @@ var Translations=React.createClass({displayName: "Translations",
 		var links=this.getLink(params.sender,"array");
 		var overlapped=markuputil.hasOverlap(start+1,len-2,links);
 		if (overlapped) return true;
+
+		if (params.sender[0]=="s" && len>0) {
+			action_suggest.get(text,this.props.data,this.state.links);
+		}
 
 		action_selection.set(params.sender,sels);
 	}
@@ -2699,7 +2824,7 @@ var Translations=React.createClass({displayName: "Translations",
 	}
 })
 module.exports=Translations;
-},{"../actions/highlight":"C:\\ksana2015\\correspondence\\src\\actions\\highlight.js","../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","../stores/highlight":"C:\\ksana2015\\correspondence\\src\\stores\\highlight.js","../stores/link":"C:\\ksana2015\\correspondence\\src\\stores\\link.js","../stores/selection":"C:\\ksana2015\\correspondence\\src\\stores\\selection.js","../stores/user":"C:\\ksana2015\\correspondence\\src\\stores\\user.js","ksana-layer-react":"C:\\ksana2015\\node_modules\\ksana-layer-react\\index.js","react-bootstrap":"react-bootstrap","react/addons":"react/addons","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\node_modules\\firebase\\lib\\firebase-web.js":[function(require,module,exports){
+},{"../actions/highlight":"C:\\ksana2015\\correspondence\\src\\actions\\highlight.js","../actions/link":"C:\\ksana2015\\correspondence\\src\\actions\\link.js","../actions/selection":"C:\\ksana2015\\correspondence\\src\\actions\\selection.js","../actions/suggest":"C:\\ksana2015\\correspondence\\src\\actions\\suggest.js","../stores/highlight":"C:\\ksana2015\\correspondence\\src\\stores\\highlight.js","../stores/link":"C:\\ksana2015\\correspondence\\src\\stores\\link.js","../stores/selection":"C:\\ksana2015\\correspondence\\src\\stores\\selection.js","../stores/suggest":"C:\\ksana2015\\correspondence\\src\\stores\\suggest.js","../stores/user":"C:\\ksana2015\\correspondence\\src\\stores\\user.js","ksana-layer-react":"C:\\ksana2015\\node_modules\\ksana-layer-react\\index.js","react-bootstrap":"react-bootstrap","react/addons":"react/addons","reflux":"C:\\ksana2015\\node_modules\\reflux\\index.js"}],"C:\\ksana2015\\node_modules\\firebase\\lib\\firebase-web.js":[function(require,module,exports){
 /*! @license Firebase v2.2.4
     License: https://www.firebase.com/terms/terms-of-service.html */
 (function() {var h,aa=this;function n(a){return void 0!==a}function ba(){}function ca(a){a.ub=function(){return a.tf?a.tf:a.tf=new a}}
@@ -4184,7 +4309,7 @@ var SelectableView=React.createClass({
 	,removeBlankInselection:function(sel,text) {
 		if (text.trim()==="") return;
 		var s=0,c=text.charCodeAt(0);
-		while (c<0x33 || (c>=0xf0b && c<=0xf0e)) {
+		while (c<0x21 || (c>=0xf0b && c<=0xf0e)) {
 			sel.start++;
 			sel.len--;
 			text=text.substr(1);
@@ -4193,9 +4318,9 @@ var SelectableView=React.createClass({
 
 		var e=e=text.length-1;
 		c=text.charCodeAt(text.length-1);
-		while (c<0x33 || (c>=0xf0b && c<=0xf0e)) {
+		while (c<0x21 || (c>=0xf0b && c<=0xf0e)) {
 			sel.len--;
-			text=text.substr(0,text.length-2);
+			text=text.substr(0,text.length-1);
 			c=text.charCodeAt(text.length-1);
 		}
 		return text;
@@ -4508,6 +4633,12 @@ var SegNav=React.createClass({
 		if (segnow<this.state.segs.length-1) segnow++;
 		this.goSeg(segnow);
 	}
+	,onKeyPress:function(e) {
+		if (e.key=="Enter") {
+			var idx=this.state.segs.indexOf(e.target.value);
+			if (idx>-1) this.goSeg(idx);
+		}
+	}
 	,onChange:function(e) {
 		var seg=e.target.value;
 		var idx=this.state.segs.indexOf(seg);
@@ -4518,13 +4649,13 @@ var SegNav=React.createClass({
 			else {
 				this.refs.seg.getDOMNode().value=this.state.segs[this.state.segnow];
 			}
-		}.bind(this),1000);
+		}.bind(this),2000);
 	}
 	,render : function() {
 		var segname=this.state.segs[this.state.segnow];
 		return E("span",null,
 			E(this.btn,{onClick:this.prev,disabled:this.state.segnow==0},"←"),
-			E("input",{ref:"seg",defaultValue:segname,onChange:this.onChange}),
+			E("input",{ref:"seg",defaultValue:segname,onKeyPress:this.onKeyPress,onChange:this.onChange}),
 			E(this.btn,{onClick:this.next,disabled:this.state.segnow==this.state.segs.length-1},"→")
 		);
 	}
