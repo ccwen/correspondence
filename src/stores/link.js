@@ -2,7 +2,7 @@ var Reflux=require("reflux");
 var action=require("../actions/link");
 var store_selection=require("../stores/selection");
 //var mockdata=require("./mockdata").links;
-var firebaseurl=require("./firebaseurl");
+var endpoint=require("./endpoint");
 var Link=Reflux.createStore({
 	listenables:action
 	,links:{}
@@ -45,7 +45,7 @@ var Link=Reflux.createStore({
 		this.onFetch(this.uid);
 	}
 	,onRemove:function(seg,markupkey) {
-		firebaseurl.markups(seg).child(markupkey).remove();
+		endpoint.markups(seg).child(markupkey).remove();
 	}
 	,onSet:function(seg,markupkey) {
 		if (this.savingToFirebase) return;
@@ -53,9 +53,9 @@ var Link=Reflux.createStore({
 		if (!Object.keys(selections).length)return;
 		var ref=null;
 		if (markupkey)	 {
-			ref=firebaseurl.markups(seg).child(markupkey);
+			ref=endpoint.markups(seg).child(markupkey);
 		} else {
-			ref=firebaseurl.markups(seg).push();
+			ref=endpoint.markups(seg).push();
 		}
 		this.savingToFirebase=true;
 		ref.set(selections,function(){
@@ -76,17 +76,17 @@ var Link=Reflux.createStore({
 
 		if (this.uid!==uid) {
 			if (this.uid) {
-				firebaseurl.markups(uid).off();
+				endpoint.markups(uid).off();
 			} else {
-				firebaseurl.markups(uid).on("child_added",this.markupAdded);
-				firebaseurl.markups(uid).on("child_removed",this.markupRemoved);
-				firebaseurl.markups(uid).on("child_changed",this.markupChanged);			
+				endpoint.markups(uid).on("child_added",this.markupAdded);
+				endpoint.markups(uid).on("child_removed",this.markupRemoved);
+				endpoint.markups(uid).on("child_changed",this.markupChanged);			
 			}			
 		}
 
 		this.uid=uid;
 
-		firebaseurl.markups(uid).once("value",function(res){
+		endpoint.markups(uid).once("value",function(res){
 			this.links={};
 			var data=res.val();
 			for (var key in data) {

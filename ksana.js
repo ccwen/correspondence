@@ -1,6 +1,6 @@
 jsonp_handler({
  "version": "1",
- "build": 487,
+ "build": 566,
  "title": "correspondence",
  "minruntime": 1,
  "baseurl": "http://rawgit.com/ksanaforge/correspondence/master/",
@@ -9,6 +9,7 @@ jsonp_handler({
   "external": [
    "react",
    "react/addons",
+   "react/lib/ReactMount",
    "react-bootstrap",
    "ksana-search",
    "ksana-jsonrom",
@@ -27,18 +28,18 @@ jsonp_handler({
  "filesizes": [
   506,
   61,
-  974589,
-  605871,
+  974817,
+  650598,
   277980,
-  772
+  799
  ],
  "filedates": [
   "2015-07-21T13:13:21.504Z",
   "2015-07-21T13:13:40.950Z",
-  "2015-07-21T13:08:09.974Z",
-  "2015-07-29T15:21:14.279Z",
+  "2015-07-30T02:38:51.497Z",
+  "2015-07-30T08:06:11.600Z",
   "2015-07-19T13:52:15.275Z",
-  "2015-07-29T15:20:14.245Z"
+  "2015-07-30T03:04:05.143Z"
  ],
- "date": "2015-07-29T15:21:15.204Z"
+ "date": "2015-07-30T08:06:12.520Z"
 })

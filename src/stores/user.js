@@ -1,5 +1,5 @@
 var Reflux=require("reflux");
-var firebaseurl=require("./firebaseurl");
+var endpoint=require("./endpoint");
 var actions=require("../actions/user");
 
 
@@ -7,7 +7,7 @@ var User=Reflux.createStore({
 	listenables: actions
 	,auth:null
 	,init:function() {
-		this.rootRef = firebaseurl.user();
+		this.rootRef = endpoint.user();
 		this.auth=this.rootRef.getAuth();
 		if (this.auth) {
 			var that=this;
