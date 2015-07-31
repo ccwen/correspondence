@@ -76,10 +76,8 @@ var Link=Reflux.createStore({
 
 		if (this.uid!==uid) {
 			if (this.uid) {
-				console.log("off",this.uid);
 				endpoint.markups(this.uid).off();
 			}
-			console.log("on",uid)
 			endpoint.markups(uid).on("child_added",this.markupAdded);
 			endpoint.markups(uid).on("child_removed",this.markupRemoved);
 			endpoint.markups(uid).on("child_changed",this.markupChanged);
